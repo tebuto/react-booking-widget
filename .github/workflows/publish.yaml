@@ -9,6 +9,9 @@ jobs:
   publish:
     name: Publish to npm
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for provenance generation
+      contents: read
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
