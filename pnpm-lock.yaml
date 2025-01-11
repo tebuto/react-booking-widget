@@ -7,66 +7,70 @@ settings:
 importers:
 
   .:
+    dependencies:
+      react:
+        specifier: ^19.0.0
+        version: 19.0.0
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.0.0(react@19.0.0)
     devDependencies:
       '@babel/core':
-        specifier: ^7.26.0
+        specifier: 7.26.0
         version: 7.26.0
       '@babel/preset-env':
-        specifier: ^7.26.0
+        specifier: 7.26.0
         version: 7.26.0(@babel/core@7.26.0)
       '@babel/preset-react':
-        specifier: ^7.26.3
+        specifier: 7.26.3
         version: 7.26.3(@babel/core@7.26.0)
       '@babel/preset-typescript':
-        specifier: ^7.26.0
+        specifier: 7.26.0
         version: 7.26.0(@babel/core@7.26.0)
       '@biomejs/biome':
-        specifier: ^1.9.4
+        specifier: 1.9.4
         version: 1.9.4
       '@rollup/plugin-commonjs':
-        specifier: ^28.0.2
+        specifier: 28.0.2
         version: 28.0.2(rollup@4.30.1)
       '@rollup/plugin-node-resolve':
-        specifier: ^16.0.0
+        specifier: 16.0.0
         version: 16.0.0(rollup@4.30.1)
       '@rollup/plugin-terser':
-        specifier: ^0.4.4
+        specifier: 0.4.4
         version: 0.4.4(rollup@4.30.1)
       '@rollup/plugin-typescript':
-        specifier: ^12.1.2
+        specifier: 12.1.2
         version: 12.1.2(rollup@4.30.1)(tslib@2.8.1)(typescript@5.7.3)
       '@testing-library/react':
-        specifier: ^16.1.0
+        specifier: 16.1.0
         version: 16.1.0(@testing-library/dom@10.4.0)(@types/react@19.0.4)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@types/jest':
-        specifier: ^29.5.14
+        specifier: 29.5.14
         version: 29.5.14
       '@types/react':
         specifier: 19.0.4
         version: 19.0.4
       babel-jest:
-        specifier: ^29.7.0
+        specifier: 29.7.0
         version: 29.7.0(@babel/core@7.26.0)
       husky:
-        specifier: ^9.1.7
+        specifier: 9.1.7
         version: 9.1.7
       jest:
-        specifier: ^29.7.0
+        specifier: 29.7.0
         version: 29.7.0(@types/node@22.10.5)
       jest-environment-jsdom:
-        specifier: ^29.7.0
+        specifier: 29.7.0
         version: 29.7.0
-      react:
-        specifier: 19.0.0
-        version: 19.0.0
       rollup:
-        specifier: ^4.30.1
+        specifier: 4.30.1
         version: 4.30.1
       rollup-plugin-dts:
-        specifier: ^6.1.1
+        specifier: 6.1.1
         version: 6.1.1(rollup@4.30.1)(typescript@5.7.3)
       rollup-plugin-peer-deps-external:
-        specifier: ^2.2.4
+        specifier: 2.2.4
         version: 2.2.4(rollup@4.30.1)
       tslib:
         specifier: 2.8.1
