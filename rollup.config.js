@@ -5,19 +5,19 @@ import typescript from '@rollup/plugin-typescript'
 import dts from 'rollup-plugin-dts'
 import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 
-const packageJson = require('./package.json')
+import pkg from './package.json' assert { type: 'json' }
 
 export default [
     {
         input: 'src/index.ts',
         output: [
             {
-                file: packageJson.main,
+                file: pkg.main,
                 format: 'cjs',
                 sourcemap: true
             },
             {
-                file: packageJson.module,
+                file: pkg.module,
                 format: 'esm',
                 sourcemap: true
             }

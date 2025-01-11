@@ -1,1 +1,1 @@
-export { default } from './TebutoBookingWidget'
+export { default as TebutoBookingWidget } from './TebutoBookingWidget'

@@ -1,0 +1,6 @@
+.github
+.husky
+.vscode
+biome.json
+rollup.config.js
+sonar-project.properties

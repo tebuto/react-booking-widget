@@ -7,7 +7,7 @@
     "license": "MIT",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
-    "types": "dist/index.d.ts",
+    "types": "dist/types.d.ts",
     "scripts": {
         "test": "jest",
         "build": "rollup -c --bundleConfigAsCjs",

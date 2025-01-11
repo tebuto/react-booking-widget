@@ -37,6 +37,9 @@ jobs:
       - name: Tests
         run: pnpm run test
 
+      - name: Build
+        run: pnpm run build
+
       - name: Publish to npm
         run: npm publish --provenance --access public
         env:
