@@ -1,0 +1,17 @@
+{
+    "editor.defaultFormatter": "biomejs.biome",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports.biome": "always",
+        "quickfix.biome": "always"
+    },
+    "files.insertFinalNewline": true,
+    "[typescript]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[json]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "biomejs.biome"
+    }
+}

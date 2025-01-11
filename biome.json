@@ -1,0 +1,66 @@
+{
+    "$schema": "https://biomejs.dev/schemas/1.8.0/schema.json",
+    "organizeImports": {
+        "enabled": true
+    },
+    "formatter": {
+        "enabled": true,
+        "formatWithErrors": false,
+        "indentWidth": 4,
+        "indentStyle": "space",
+        "lineWidth": 120,
+        "ignore": ["node_modules/**", "dist/**"]
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+            "style": {
+                "useImportType": "off",
+                "useNodejsImportProtocol": "off"
+            },
+            "complexity": {
+                "noForEach": "off",
+                "noBannedTypes": "off"
+            },
+            "suspicious": {
+                "noExplicitAny": "off",
+                "noThenProperty": "off",
+                "noArrayIndexKey": "off"
+            },
+            "a11y": {
+                "useKeyWithClickEvents": "off"
+            },
+            "correctness": {
+                "useExhaustiveDependencies": "off"
+            }
+        },
+        "ignore": ["node_modules/**", "dist/**"]
+    },
+    "javascript": {
+        "parser": {
+            "unsafeParameterDecoratorsEnabled": true
+        },
+        "formatter": {
+            "enabled": true,
+            "indentStyle": "space",
+            "indentWidth": 4,
+            "lineWidth": 180,
+            "arrowParentheses": "asNeeded",
+            "trailingCommas": "none",
+            "quoteStyle": "single",
+            "semicolons": "asNeeded"
+        }
+    },
+    "json": {
+        "formatter": {
+            "enabled": true,
+            "indentStyle": "space",
+            "indentWidth": 4,
+            "lineWidth": 180
+        },
+        "parser": {
+            "allowComments": true
+        }
+    }
+}
