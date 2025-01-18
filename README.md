@@ -8,8 +8,8 @@
 
 <div align="center">
   <a href="https://www.npmjs.com/package/jest"><img alt="NPM Version" src="https://img.shields.io/npm/v/%40tebuto%2Freact-booking-widget"></a>
-  <a href="https://github.com/jestjs/jest/blob/main/LICENSE"> <img alt="@tebuto/react-booking-widget is released under a MIT licence" src="https://img.shields.io/npm/l/%40tebuto%2Freact-booking-widget"></a>
-  <a href="https://github.com/jestjs/jest/actions/workflows/branch.yaml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/tebuto/react-booking-widget/.github%2Fworkflows%2Fbranch.yaml?label=CI&logo=GitHub"></a>
+  <a href="https://github.com/tebuto/react-gdpr-cookie-consent/blob/main/LICENSE"> <img alt="@tebuto/react-booking-widget is released under a MIT licence" src="https://img.shields.io/npm/l/%40tebuto%2Freact-booking-widget"></a>
+  <a href="https://github.com/tebuto/react-gdpr-cookie-consent/actions/workflows/branch.yaml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/tebuto/react-booking-widget/.github%2Fworkflows%2Fbranch.yaml?label=CI&logo=GitHub"></a>
 </div>
 <hr />
 

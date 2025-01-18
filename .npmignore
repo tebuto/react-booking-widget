@@ -1,7 +1,12 @@
+# Directories
 .github
 .husky
 .vscode
-biome.json
-rollup.config.js
-sonar-project.properties
+public
 src
+
+# Files
+*.json
+*.config.js
+!package.json
+sonar-project.properties
