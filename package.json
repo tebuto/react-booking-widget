@@ -68,7 +68,17 @@
     "engines": {
         "node": ">=22"
     },
-    "keywords": ["appointment", "booking", "calendar", "react", "tebuto", "widget", "online", "therapist", "psychologist"],
+    "keywords": [
+        "appointment",
+        "booking",
+        "calendar",
+        "react",
+        "tebuto",
+        "widget",
+        "online",
+        "therapist",
+        "psychologist"
+    ],
     "publishConfig": {
         "access": "public"
     }
