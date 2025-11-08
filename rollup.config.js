@@ -22,7 +22,18 @@ export default [
                 sourcemap: true
             }
         ],
-        plugins: [peerDepsExternal(), resolve(), commonjs(), typescript({ tsconfig: './tsconfig.json' }), terser()],
+        plugins: [
+            peerDepsExternal(),
+            resolve(),
+            commonjs(),
+            typescript({
+                tsconfig: './tsconfig.json',
+                outDir: 'dist',
+                declaration: false,
+                declarationMap: false
+            }),
+            terser()
+        ],
         external: ['react', 'react-dom']
     },
     {
