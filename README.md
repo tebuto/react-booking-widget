@@ -10,6 +10,7 @@
   <a href="https://www.npmjs.com/package/jest"><img alt="NPM Version" src="https://img.shields.io/npm/v/%40tebuto%2Freact-booking-widget"></a>
   <a href="https://github.com/tebuto/react-gdpr-cookie-consent/blob/main/LICENSE"> <img alt="@tebuto/react-booking-widget is released under a MIT licence" src="https://img.shields.io/npm/l/%40tebuto%2Freact-booking-widget"></a>
   <a href="https://github.com/tebuto/react-gdpr-cookie-consent/actions/workflows/branch.yaml"><img alt="GitHub Actions Workflow Status" src="https://img.shields.io/github/actions/workflow/status/tebuto/react-booking-widget/.github%2Fworkflows%2Fbranch.yaml?label=CI&logo=GitHub"></a>
+  <a href="https://sonar.artus-engineering.de/dashboard?id=tebuto_react-booking-widget_1010e87a-ca30-4917-a946-eeaa65dede4c"><img alt="SonarQube Quality Gate Status" src="https://sonar.artus-engineering.de/api/project_badges/measure?project=tebuto_react-booking-widget_1010e87a-ca30-4917-a946-eeaa65dede4c&metric=alert_status&token=sqb_86e6603b8987b1a57a08d1f185af574b012fc7f2"></a>
 </div>
 <hr />
 
