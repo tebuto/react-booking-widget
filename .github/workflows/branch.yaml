@@ -23,9 +23,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
-          cache: 'pnpm'
-          cache-dependency-path: 'pnpm-lock.yaml'
+          node-version: "22.x"
+          cache: "pnpm"
+          cache-dependency-path: "pnpm-lock.yaml"
 
       - name: Install dependencies
         run: |
@@ -47,33 +47,13 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22.x'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: |
-          pnpm install --frozen-lockfile
-
-      - name: Scan
-        uses: sonarsource/sonarqube-scan-action@v4
+      - name: Analyze with SonarQube
+        uses: SonarSource/sonarqube-scan-action@v6
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_PR_BASE: ${{ github.event.pull_request.base.sha }}
-          SONAR_PR_BRANCH: ${{ github.event.pull_request.head.ref }}
-          SONAR_PR_KEY: ${{ github.event.pull_request.number }}
-
-      - name: Quality Gate
-        uses: sonarsource/sonarqube-quality-gate-action@v1
-        timeout-minutes: 5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
+        with:
+          args: -Dsonar.projectKey=tebuto_react-booking-widget_1010e87a-ca30-4917-a946-eeaa65dede4c
