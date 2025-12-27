@@ -7,7 +7,7 @@ import TebutoBookingWidget from './TebutoBookingWidget'
 /**
  * Live preview component that loads and renders the actual Tebuto widget.
  * MSW (Mock Service Worker) intercepts API calls to provide mock data.
- * 
+ *
  * Important: The widget reads config from the SCRIPT tag's data attributes,
  * not from a div. So we set them on the script element.
  */

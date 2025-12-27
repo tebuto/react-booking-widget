@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw'
+import { HttpResponse, http } from 'msw'
 
 // Mock therapist data
 const mockTherapist = {
@@ -144,4 +144,3 @@ export const handlers = [
         })
     })
 ]
-
