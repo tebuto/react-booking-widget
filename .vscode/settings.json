@@ -14,7 +14,7 @@
         "editor.defaultFormatter": "biomejs.biome"
     },
     "[markdown]": {
-        "editor.defaultFormatter": "yzhang.markdown-all-in-one"
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
     "markdown.extension.tableFormatter.enabled": false,
     "markdown.extension.toc.levels": "1..6"
