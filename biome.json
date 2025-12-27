@@ -7,7 +7,7 @@
         "indentWidth": 4,
         "indentStyle": "space",
         "lineWidth": 120,
-        "includes": ["**", "!**/node_modules/**", "!**/dist/**", "!**/public/**"]
+        "includes": ["**", "!**/node_modules/**", "!**/dist/**", "!**/public/**", "!**/syntax-ts/**"]
     },
     "linter": {
         "enabled": true,
@@ -33,7 +33,7 @@
                 "useExhaustiveDependencies": "off"
             }
         },
-        "includes": ["**", "!**/node_modules/**", "!**/dist/**", "!**/public/**"]
+        "includes": ["**", "!**/node_modules/**", "!**/dist/**", "!**/public/**", "!**/syntax-ts/**"]
     },
     "javascript": {
         "parser": {

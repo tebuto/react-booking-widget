@@ -57,4 +57,3 @@ export function useTherapist(): UseTherapistReturn {
         refetch: fetchTherapist
     }
 }
-

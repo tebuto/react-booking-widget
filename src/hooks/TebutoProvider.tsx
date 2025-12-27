@@ -36,13 +36,7 @@ type TebutoProviderProps = {
  * </TebutoProvider>
  * ```
  */
-export function TebutoProvider({
-    therapistUUID,
-    apiBaseUrl = TEBUTO_API_BASE_URL,
-    categories,
-    includeSubusers,
-    children
-}: TebutoProviderProps) {
+export function TebutoProvider({ therapistUUID, apiBaseUrl = TEBUTO_API_BASE_URL, categories, includeSubusers, children }: TebutoProviderProps) {
     const value = useMemo<TebutoContextValue>(
         () => ({
             therapistUUID,
@@ -73,4 +67,3 @@ export function useTebutoContext(): TebutoContextValue {
 
     return context
 }
-

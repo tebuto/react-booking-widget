@@ -128,4 +128,3 @@ export type EnrichedTimeSlot = TimeSlot & {
     isToday: boolean
     isPast: boolean
 }
-

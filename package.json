@@ -52,7 +52,10 @@
         "vite": "^7.3.0"
     },
     "jest": {
-        "testEnvironment": "jsdom"
+        "testEnvironment": "jsdom",
+        "setupFilesAfterEnv": [
+            "<rootDir>/src/setupTests.ts"
+        ]
     },
     "babel": {
         "presets": [

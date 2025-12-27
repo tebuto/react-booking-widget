@@ -87,4 +87,3 @@ export const Default: Story = {
         therapistUUID: DEMO_THERAPIST_UUID
     }
 }
-

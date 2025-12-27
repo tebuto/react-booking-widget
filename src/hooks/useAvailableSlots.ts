@@ -90,6 +90,8 @@ export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAv
     })
 
     const categoriesToFilter = filterCategories ?? contextCategories
+    // Stabilize the categories dependency to prevent infinite loops
+    const categoriesKey = categoriesToFilter?.join(',') ?? ''
 
     const fetchSlots = useCallback(async () => {
         setState(prev => ({ ...prev, isLoading: true, error: null }))
@@ -97,8 +99,8 @@ export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAv
         try {
             const url = new URL(buildUrl(`/events/${therapistUUID}`))
 
-            if (categoriesToFilter && categoriesToFilter.length > 0) {
-                url.searchParams.set('categories', categoriesToFilter.join(','))
+            if (categoriesKey) {
+                url.searchParams.set('categories', categoriesKey)
             }
 
             const response = await fetch(url.toString())
@@ -113,7 +115,7 @@ export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAv
             const error = err instanceof Error ? err : new Error('Unknown error occurred')
             setState({ data: null, isLoading: false, error })
         }
-    }, [therapistUUID, buildUrl, categoriesToFilter])
+    }, [therapistUUID, buildUrl, categoriesKey])
 
     useEffect(() => {
         if (autoFetch) {
@@ -190,4 +192,3 @@ export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAv
         totalSlots: state.data?.length ?? 0
     }
 }
-

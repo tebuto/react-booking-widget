@@ -112,7 +112,7 @@ function Calendar({ availableDates, selectedDate, onSelectDate }: CalendarProps)
         return new Set(availableDates.map(d => d.toDateString()))
     }, [availableDates])
 
-    const { year, month, daysInMonth, firstDayOfWeek, weeks } = useMemo(() => {
+    const { year, month, weeks } = useMemo(() => {
         const year = viewDate.getFullYear()
         const month = viewDate.getMonth()
         const firstDay = new Date(year, month, 1)
@@ -293,22 +293,10 @@ function Calendar({ availableDates, selectedDate, onSelectDate }: CalendarProps)
                                     style={{
                                         aspectRatio: '1',
                                         minHeight: 44,
-                                        border: selected
-                                            ? '2px solid var(--booking-accent)'
-                                            : todayMark
-                                              ? '1px solid var(--booking-accent)'
-                                              : '1px solid transparent',
+                                        border: selected ? '2px solid var(--booking-accent)' : todayMark ? '1px solid var(--booking-accent)' : '1px solid transparent',
                                         borderRadius: 'var(--booking-radius-sm)',
-                                        background: selected
-                                            ? 'var(--booking-accent)'
-                                            : available
-                                              ? 'var(--booking-surface-elevated)'
-                                              : 'transparent',
-                                        color: selected
-                                            ? '#000'
-                                            : available
-                                              ? 'var(--booking-text)'
-                                              : 'var(--booking-text-subtle)',
+                                        background: selected ? 'var(--booking-accent)' : available ? 'var(--booking-surface-elevated)' : 'transparent',
+                                        color: selected ? '#000' : available ? 'var(--booking-text)' : 'var(--booking-text-subtle)',
                                         cursor: available ? 'pointer' : 'default',
                                         fontSize: 14,
                                         fontWeight: selected ? 600 : available ? 500 : 400,
@@ -768,9 +756,7 @@ function BookingForm({ slot, showLocationSelector, selectedLocation, onLocationC
                         border: '1px solid var(--booking-border)'
                     }}
                 >
-                    <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--booking-text)', marginBottom: 14 }}>
-                        Wo soll der Termin stattfinden?
-                    </div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--booking-text)', marginBottom: 14 }}>Wo soll der Termin stattfinden?</div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                         {(['virtual', 'onsite'] as const).map(loc => (
                             <button
@@ -837,9 +823,7 @@ function BookingForm({ slot, showLocationSelector, selectedLocation, onLocationC
                     </div>
                     <div>
                         <h3 style={{ fontSize: 17, fontWeight: 700, color: 'var(--booking-text)', margin: 0 }}>Ihre Kontaktdaten</h3>
-                        <p style={{ fontSize: 13, color: 'var(--booking-text-muted)', margin: '4px 0 0 0' }}>
-                            Wir benötigen diese Angaben für Ihre Terminbestätigung
-                        </p>
+                        <p style={{ fontSize: 13, color: 'var(--booking-text-muted)', margin: '4px 0 0 0' }}>Wir benötigen diese Angaben für Ihre Terminbestätigung</p>
                     </div>
                 </div>
 
@@ -866,8 +850,11 @@ function BookingForm({ slot, showLocationSelector, selectedLocation, onLocationC
                     {/* Name row */}
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                         <div>
-                            <label style={labelStyle}>Vorname</label>
+                            <label htmlFor="booking-firstName" style={labelStyle}>
+                                Vorname
+                            </label>
                             <input
+                                id="booking-firstName"
                                 type="text"
                                 required
                                 value={formData.firstName}
@@ -877,8 +864,11 @@ function BookingForm({ slot, showLocationSelector, selectedLocation, onLocationC
                             />
                         </div>
                         <div>
-                            <label style={labelStyle}>Nachname</label>
+                            <label htmlFor="booking-lastName" style={labelStyle}>
+                                Nachname
+                            </label>
                             <input
+                                id="booking-lastName"
                                 type="text"
                                 required
                                 value={formData.lastName}
@@ -891,8 +881,11 @@ function BookingForm({ slot, showLocationSelector, selectedLocation, onLocationC
 
                     {/* Email */}
                     <div>
-                        <label style={labelStyle}>E-Mail-Adresse</label>
+                        <label htmlFor="booking-email" style={labelStyle}>
+                            E-Mail-Adresse
+                        </label>
                         <input
+                            id="booking-email"
                             type="email"
                             required
                             value={formData.email}
@@ -904,10 +897,11 @@ function BookingForm({ slot, showLocationSelector, selectedLocation, onLocationC
 
                     {/* Phone */}
                     <div>
-                        <label style={{ ...labelStyle, color: 'var(--booking-text-muted)' }}>
+                        <label htmlFor="booking-phone" style={{ ...labelStyle, color: 'var(--booking-text-muted)' }}>
                             Telefonnummer <span style={{ fontWeight: 400, textTransform: 'none' }}>(optional)</span>
                         </label>
                         <input
+                            id="booking-phone"
                             type="tel"
                             value={formData.phone}
                             onChange={e => setFormData(d => ({ ...d, phone: e.target.value }))}
@@ -918,10 +912,11 @@ function BookingForm({ slot, showLocationSelector, selectedLocation, onLocationC
 
                     {/* Notes */}
                     <div>
-                        <label style={{ ...labelStyle, color: 'var(--booking-text-muted)' }}>
+                        <label htmlFor="booking-notes" style={{ ...labelStyle, color: 'var(--booking-text-muted)' }}>
                             Nachricht <span style={{ fontWeight: 400, textTransform: 'none' }}>(optional)</span>
                         </label>
                         <textarea
+                            id="booking-notes"
                             value={formData.notes}
                             onChange={e => setFormData(d => ({ ...d, notes: e.target.value }))}
                             style={{ ...inputStyle, minHeight: 100, resize: 'vertical' }}
@@ -1155,9 +1150,7 @@ function BookingInterface() {
                     >
                         Termin buchen{therapist.data ? ` bei ${therapist.data.name}` : ''}
                     </h1>
-                    <p style={{ fontSize: 15, color: 'var(--booking-text-muted)', margin: 0 }}>
-                        Wählen Sie einen passenden Termin für Ihr Anliegen
-                    </p>
+                    <p style={{ fontSize: 15, color: 'var(--booking-text-muted)', margin: 0 }}>Wählen Sie einen passenden Termin für Ihr Anliegen</p>
                 </header>
 
                 {/* Step indicator */}
