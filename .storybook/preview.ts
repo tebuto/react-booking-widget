@@ -1,20 +1,20 @@
 import type { Preview } from '@storybook/react'
 
+let mswInitialized = false
+
 // Initialize MSW
 async function initMocks() {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && !mswInitialized) {
         const { worker } = await import('../src/mocks/browser')
         await worker.start({
-            onUnhandledRequest: 'bypass', // Don't warn about unhandled requests
+            onUnhandledRequest: 'bypass',
             serviceWorker: {
                 url: '/mockServiceWorker.js'
             }
         })
+        mswInitialized = true
     }
 }
-
-// Start MSW before stories load
-initMocks()
 
 const preview: Preview = {
     parameters: {
@@ -27,7 +27,13 @@ const preview: Preview = {
                 { name: 'dark', value: '#1f2937' }
             ]
         }
-    }
+    },
+    loaders: [
+        async () => {
+            await initMocks()
+            return {}
+        }
+    ]
 }
 
 export default preview
