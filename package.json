@@ -1,6 +1,6 @@
 {
     "name": "@tebuto/react-booking-widget",
-    "version": "1.0.6",
+    "version": "1.1.1",
     "description": "React Component for the Tebuto Booking Widget",
     "author": "Tebuto GmbH",
     "homepage": "https://tebuto.de",
@@ -16,7 +16,8 @@
         "prepare": "husky",
         "lint": "biome lint .",
         "lint:fix": "biome check --write .",
-        "format": "biome format --write --error-on-warnings ."
+        "format": "biome format --write --error-on-warnings .",
+        "biome:migrate": "biome migrate --write"
     },
     "peerDependencies": {
         "react": "^19.0.0",
