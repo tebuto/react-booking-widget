@@ -37,15 +37,6 @@ function createMockSlots() {
     ]
 }
 
-const mockBookingResponse = {
-    id: 12345,
-    createdAt: '2025-01-10T12:00:00.000Z',
-    locationSelection: 'onsite',
-    isConfirmed: true,
-    isOutage: false,
-    ics: 'BEGIN:VCALENDAR\nVERSION:2.0\nEND:VCALENDAR'
-}
-
 function createWrapper() {
     return function Wrapper({ children }: { children: ReactNode }) {
         return <TebutoProvider therapistUUID={therapistUUID}>{children}</TebutoProvider>
@@ -302,7 +293,7 @@ describe('useBookingFlow', () => {
             if (url.includes('/book')) {
                 return Promise.resolve({
                     ok: true,
-                    json: async () => mockBookingResponse
+                    json: async () => ({})
                 })
             }
             return Promise.resolve({
@@ -342,8 +333,8 @@ describe('useBookingFlow', () => {
         })
 
         expect(result.current.step).toBe('confirmation')
-        expect(result.current.booking.booking).toEqual(mockBookingResponse)
-        expect(onBookingComplete).toHaveBeenCalledWith(mockBookingResponse)
+        expect(result.current.booking.isSuccess).toBe(true)
+        expect(onBookingComplete).toHaveBeenCalled()
     })
 
     it('should return false when slot claim fails', async () => {

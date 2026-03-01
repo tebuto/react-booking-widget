@@ -32,15 +32,6 @@ const mockClientInfo: ClientInfo = {
     notes: 'Test booking'
 }
 
-const mockBookingResponse = {
-    id: 12345,
-    createdAt: '2025-01-10T12:00:00.000Z',
-    locationSelection: 'onsite',
-    isConfirmed: true,
-    isOutage: false,
-    ics: 'BEGIN:VCALENDAR\nVERSION:2.0\nEND:VCALENDAR'
-}
-
 function createWrapper() {
     return function Wrapper({ children }: { children: ReactNode }) {
         return <TebutoProvider therapistUUID={therapistUUID}>{children}</TebutoProvider>
@@ -48,18 +39,9 @@ function createWrapper() {
 }
 
 describe('useBookAppointment', () => {
-    let createObjectURLMock: jest.Mock
-    let revokeObjectURLMock: jest.Mock
-
     beforeEach(() => {
         jest.clearAllMocks()
         global.fetch = jest.fn()
-
-        // Mock URL methods
-        createObjectURLMock = jest.fn(() => 'blob:test-url')
-        revokeObjectURLMock = jest.fn()
-        global.URL.createObjectURL = createObjectURLMock
-        global.URL.revokeObjectURL = revokeObjectURLMock
     })
 
     afterEach(() => {
@@ -71,23 +53,22 @@ describe('useBookAppointment', () => {
             wrapper: createWrapper()
         })
 
-        expect(result.current.booking).toBeNull()
         expect(result.current.isLoading).toBe(false)
         expect(result.current.error).toBeNull()
         expect(result.current.isSuccess).toBe(false)
     })
 
-    it('should book an appointment successfully', async () => {
+    it('should submit booking request successfully', async () => {
         ;(global.fetch as jest.Mock).mockResolvedValue({
             ok: true,
-            json: async () => mockBookingResponse
+            json: async () => ({})
         })
 
         const { result } = renderHook(() => useBookAppointment(), {
             wrapper: createWrapper()
         })
 
-        let response: unknown
+        let response: boolean
         await act(async () => {
             response = await result.current.book({
                 slot: mockSlot,
@@ -95,8 +76,7 @@ describe('useBookAppointment', () => {
             })
         })
 
-        expect(response).toEqual(mockBookingResponse)
-        expect(result.current.booking).toEqual(mockBookingResponse)
+        expect(response!).toBe(true)
         expect(result.current.isLoading).toBe(false)
         expect(result.current.isSuccess).toBe(true)
         expect(result.current.error).toBeNull()
@@ -105,7 +85,7 @@ describe('useBookAppointment', () => {
     it('should call API with correct parameters', async () => {
         ;(global.fetch as jest.Mock).mockResolvedValue({
             ok: true,
-            json: async () => mockBookingResponse
+            json: async () => ({})
         })
 
         const { result } = renderHook(() => useBookAppointment(), {
@@ -141,7 +121,7 @@ describe('useBookAppointment', () => {
     it('should use custom location selection when provided', async () => {
         ;(global.fetch as jest.Mock).mockResolvedValue({
             ok: true,
-            json: async () => mockBookingResponse
+            json: async () => ({})
         })
 
         const { result } = renderHook(() => useBookAppointment(), {
@@ -170,7 +150,7 @@ describe('useBookAppointment', () => {
             wrapper: createWrapper()
         })
 
-        let response: unknown
+        let response: boolean
         await act(async () => {
             response = await result.current.book({
                 slot: mockSlot,
@@ -178,8 +158,7 @@ describe('useBookAppointment', () => {
             })
         })
 
-        expect(response).toBeNull()
-        expect(result.current.booking).toBeNull()
+        expect(response!).toBe(false)
         expect(result.current.isSuccess).toBe(false)
         expect(result.current.error).toBeInstanceOf(Error)
         expect(result.current.error?.message).toBe('Booking failed: Conflict')
@@ -192,7 +171,7 @@ describe('useBookAppointment', () => {
             wrapper: createWrapper()
         })
 
-        let response: unknown
+        let response: boolean
         await act(async () => {
             response = await result.current.book({
                 slot: mockSlot,
@@ -200,14 +179,14 @@ describe('useBookAppointment', () => {
             })
         })
 
-        expect(response).toBeNull()
+        expect(response!).toBe(false)
         expect(result.current.error?.message).toBe('Network error')
     })
 
     it('should reset state', async () => {
         ;(global.fetch as jest.Mock).mockResolvedValue({
             ok: true,
-            json: async () => mockBookingResponse
+            json: async () => ({})
         })
 
         const { result } = renderHook(() => useBookAppointment(), {
@@ -227,65 +206,9 @@ describe('useBookAppointment', () => {
             result.current.reset()
         })
 
-        expect(result.current.booking).toBeNull()
         expect(result.current.isLoading).toBe(false)
         expect(result.current.isSuccess).toBe(false)
         expect(result.current.error).toBeNull()
-    })
-
-    it('should download calendar file', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
-            ok: true,
-            json: async () => mockBookingResponse
-        })
-
-        // Render hook FIRST before mocking document methods
-        const { result } = renderHook(() => useBookAppointment(), {
-            wrapper: createWrapper()
-        })
-
-        await act(async () => {
-            await result.current.book({
-                slot: mockSlot,
-                client: mockClientInfo
-            })
-        })
-
-        // Now mock document methods for downloadCalendar
-        const mockLink = {
-            href: '',
-            setAttribute: jest.fn(),
-            click: jest.fn()
-        }
-        const createElementSpy = jest.spyOn(document, 'createElement').mockReturnValue(mockLink as unknown as HTMLElement)
-        const appendChildSpy = jest.spyOn(document.body, 'appendChild').mockImplementation(() => mockLink as unknown as Node)
-        const removeChildSpy = jest.spyOn(document.body, 'removeChild').mockImplementation(() => mockLink as unknown as Node)
-
-        act(() => {
-            result.current.downloadCalendar()
-        })
-
-        expect(createObjectURLMock).toHaveBeenCalled()
-        expect(mockLink.setAttribute).toHaveBeenCalledWith('download', 'appointment.ics')
-        expect(mockLink.click).toHaveBeenCalled()
-        expect(removeChildSpy).toHaveBeenCalled()
-        expect(revokeObjectURLMock).toHaveBeenCalled()
-
-        createElementSpy.mockRestore()
-        appendChildSpy.mockRestore()
-        removeChildSpy.mockRestore()
-    })
-
-    it('should not download calendar if no booking', () => {
-        const { result } = renderHook(() => useBookAppointment(), {
-            wrapper: createWrapper()
-        })
-
-        act(() => {
-            result.current.downloadCalendar()
-        })
-
-        expect(createObjectURLMock).not.toHaveBeenCalled()
     })
 
     it('should set loading state during booking', async () => {
@@ -301,7 +224,7 @@ describe('useBookAppointment', () => {
             wrapper: createWrapper()
         })
 
-        let bookPromise: Promise<unknown>
+        let bookPromise: Promise<boolean>
         act(() => {
             bookPromise = result.current.book({
                 slot: mockSlot,
@@ -314,7 +237,7 @@ describe('useBookAppointment', () => {
         await act(async () => {
             resolvePromise({
                 ok: true,
-                json: async () => mockBookingResponse
+                json: async () => ({})
             })
             await bookPromise
         })
@@ -325,7 +248,7 @@ describe('useBookAppointment', () => {
     it('should handle booking without optional fields', async () => {
         ;(global.fetch as jest.Mock).mockResolvedValue({
             ok: true,
-            json: async () => mockBookingResponse
+            json: async () => ({})
         })
 
         const { result } = renderHook(() => useBookAppointment(), {
