@@ -123,7 +123,9 @@ export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAv
                 throw new Error(`Failed to fetch slots: ${response.statusText}`)
             }
 
-            const data = (await response.json()) as TimeSlot[]
+            const responseData = await response.json()
+            // API returns { events: [], categories: [], bookingNote: null }
+            const data = (Array.isArray(responseData) ? responseData : responseData.events) as TimeSlot[]
             setState({ data, isLoading: false, error: null })
         } catch (err) {
             const error = err instanceof Error ? err : new Error('Unknown error occurred')
@@ -165,7 +167,11 @@ export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAv
 
     const availableDates = useMemo<Date[]>(() => {
         return Object.keys(slotsByDate)
-            .map(dateStr => new Date(dateStr))
+            .map(dateStr => {
+                // Parse as local time, not UTC
+                const [year, month, day] = dateStr.split('-').map(Number)
+                return new Date(year, month - 1, day)
+            })
             .sort((a, b) => a.getTime() - b.getTime())
     }, [slotsByDate])
 

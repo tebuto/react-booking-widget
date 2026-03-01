@@ -968,11 +968,10 @@ function BookingForm({ slot, showLocationSelector, selectedLocation, onLocationC
 
 type ConfirmationProps = {
     slot: EnrichedTimeSlot
-    onDownloadCalendar: () => void
     onReset: () => void
 }
 
-function Confirmation({ slot, onDownloadCalendar, onReset }: ConfirmationProps) {
+function Confirmation({ slot, onReset }: ConfirmationProps) {
     const formatDateLong = (dateStr: string) => {
         return new Date(dateStr).toLocaleDateString('de-DE', {
             weekday: 'long',
@@ -1009,7 +1008,7 @@ function Confirmation({ slot, onDownloadCalendar, onReset }: ConfirmationProps) 
                     margin: '0 0 12px 0'
                 }}
             >
-                Termin gebucht!
+                Terminanfrage eingegangen!
             </h2>
 
             <p
@@ -1021,32 +1020,13 @@ function Confirmation({ slot, onDownloadCalendar, onReset }: ConfirmationProps) 
                     lineHeight: 1.6
                 }}
             >
-                Ihr Termin <strong style={{ color: 'var(--booking-text)' }}>"{slot.title}"</strong> am{' '}
+                Ihre Anfrage für <strong style={{ color: 'var(--booking-text)' }}>"{slot.title}"</strong> am{' '}
                 <strong style={{ color: 'var(--booking-text)' }}>{formatDateLong(slot.start)}</strong> um{' '}
-                <strong style={{ color: 'var(--booking-text)' }}>{slot.timeString} Uhr</strong> wurde erfolgreich gebucht.
+                <strong style={{ color: 'var(--booking-text)' }}>{slot.timeString} Uhr</strong> ist eingegangen. Bitte bestätigen Sie den Termin über den Link in der E-Mail, die
+                wir Ihnen gerade gesendet haben.
             </p>
 
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-                <button
-                    type="button"
-                    onClick={onDownloadCalendar}
-                    style={{
-                        padding: '12px 20px',
-                        border: 'none',
-                        borderRadius: 'var(--booking-radius-sm)',
-                        background: 'var(--booking-accent)',
-                        color: '#000',
-                        fontSize: 14,
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        fontFamily: 'inherit',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 8
-                    }}
-                >
-                    📅 Zum Kalender hinzufügen
-                </button>
                 <button
                     type="button"
                     onClick={onReset}
@@ -1086,7 +1066,6 @@ function BookingInterface() {
         selectSlot,
         selectedLocation,
         setLocation,
-        booking,
         submitBooking,
         reset,
         isLoading,
@@ -1272,9 +1251,7 @@ function BookingInterface() {
                             />
                         )}
 
-                        {step === 'confirmation' && enrichedSelectedSlot && (
-                            <Confirmation slot={enrichedSelectedSlot} onDownloadCalendar={booking.downloadCalendar} onReset={reset} />
-                        )}
+                        {step === 'confirmation' && enrichedSelectedSlot && <Confirmation slot={enrichedSelectedSlot} onReset={reset} />}
                     </div>
                 </div>
             </div>

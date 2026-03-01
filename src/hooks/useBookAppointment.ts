@@ -1,9 +1,8 @@
 import { useCallback, useState } from 'react'
-import type { AppointmentLocation, BookingResponse, ClientInfo, TimeSlot } from '../api-types'
+import type { AppointmentLocation, ClientInfo, TimeSlot } from '../api-types'
 import { useTebutoContext } from './TebutoProvider'
 
-type BookingState = {
-    booking: BookingResponse | null
+type BookingRequestState = {
     isLoading: boolean
     error: Error | null
     isSuccess: boolean
@@ -15,61 +14,49 @@ type BookAppointmentParams = {
     locationSelection?: AppointmentLocation
 }
 
-type UseBookAppointmentReturn = BookingState & {
-    /** Book the appointment */
-    book: (params: BookAppointmentParams) => Promise<BookingResponse | null>
-    /** Reset the booking state */
+type UseBookAppointmentReturn = BookingRequestState & {
+    /** Submit booking request - returns true on success */
+    book: (params: BookAppointmentParams) => Promise<boolean>
+    /** Reset the state */
     reset: () => void
-    /** Download the calendar file (.ics) */
-    downloadCalendar: () => void
 }
 
 /**
- * useBookAppointment - Complete the booking process
+ * useBookAppointment - Submit a public booking request
  *
- * Submits the booking with client information and handles
- * the response including calendar download.
+ * Submits a booking request with client information. For public bookings,
+ * the client will receive a confirmation email to verify the appointment.
  *
  * @example
  * ```tsx
- * const { book, booking, isLoading, isSuccess, downloadCalendar, reset } = useBookAppointment()
+ * const { book, isLoading, isSuccess, error, reset } = useBookAppointment()
  *
  * const handleSubmit = async (clientInfo: ClientInfo) => {
- *   const result = await book({
+ *   const success = await book({
  *     slot: claimedSlot,
  *     client: clientInfo,
  *     locationSelection: selectedLocation
  *   })
  *
- *   if (result) {
+ *   if (success) {
  *     setStep('confirmation')
  *   }
- * }
- *
- * if (isSuccess) {
- *   return (
- *     <SuccessMessage>
- *       <button onClick={downloadCalendar}>Add to Calendar</button>
- *       <button onClick={reset}>Book Another</button>
- *     </SuccessMessage>
- *   )
  * }
  * ```
  */
 export function useBookAppointment(): UseBookAppointmentReturn {
     const { therapistUUID, buildUrl, fingerprint } = useTebutoContext()
-    const [state, setState] = useState<BookingState>({
-        booking: null,
+    const [state, setState] = useState<BookingRequestState>({
         isLoading: false,
         error: null,
         isSuccess: false
     })
 
     const book = useCallback(
-        async (params: BookAppointmentParams): Promise<BookingResponse | null> => {
+        async (params: BookAppointmentParams): Promise<boolean> => {
             const { slot, client, locationSelection } = params
 
-            setState(prev => ({ ...prev, isLoading: true, error: null }))
+            setState({ isLoading: true, error: null, isSuccess: false })
 
             try {
                 const response = await fetch(buildUrl(`/events/${therapistUUID}/book`), {
@@ -89,20 +76,17 @@ export function useBookAppointment(): UseBookAppointmentReturn {
                     throw new Error(`Booking failed: ${response.statusText}`)
                 }
 
-                const booking = (await response.json()) as BookingResponse
-
                 setState({
-                    booking,
                     isLoading: false,
                     error: null,
                     isSuccess: true
                 })
 
-                return booking
+                return true
             } catch (err) {
                 const error = err instanceof Error ? err : new Error('Unknown error occurred')
-                setState(prev => ({ ...prev, isLoading: false, error, isSuccess: false }))
-                return null
+                setState({ isLoading: false, error, isSuccess: false })
+                return false
             }
         },
         [therapistUUID, buildUrl, fingerprint]
@@ -110,31 +94,15 @@ export function useBookAppointment(): UseBookAppointmentReturn {
 
     const reset = useCallback(() => {
         setState({
-            booking: null,
             isLoading: false,
             error: null,
             isSuccess: false
         })
     }, [])
 
-    const downloadCalendar = useCallback(() => {
-        if (!state.booking?.ics) return
-
-        const blob = new Blob([state.booking.ics], { type: 'text/calendar;charset=utf-8' })
-        const url = window.URL.createObjectURL(blob)
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', 'appointment.ics')
-        document.body.appendChild(link)
-        link.click()
-        document.body.removeChild(link)
-        window.URL.revokeObjectURL(url)
-    }, [state.booking])
-
     return {
         ...state,
         book,
-        reset,
-        downloadCalendar
+        reset
     }
 }

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
-import type { AppointmentLocation, BookingResponse, ClientInfo, EnrichedTimeSlot, TimeSlot } from '../api-types'
+import type { AppointmentLocation, ClientInfo, EnrichedTimeSlot, TimeSlot } from '../api-types'
 import { useAvailableSlots } from './useAvailableSlots'
 import { useBookAppointment } from './useBookAppointment'
 import { useClaimSlot } from './useClaimSlot'
@@ -10,8 +10,8 @@ type BookingStep = 'loading' | 'date-selection' | 'time-selection' | 'booking-fo
 type UseBookingFlowOptions = {
     /** Categories to filter by */
     categories?: number[]
-    /** Callback when booking is complete */
-    onBookingComplete?: (booking: BookingResponse) => void
+    /** Callback when booking request is submitted successfully */
+    onBookingComplete?: () => void
     /** Callback on any error */
     onError?: (error: Error) => void
 }
@@ -212,7 +212,7 @@ export function useBookingFlow(options: UseBookingFlowOptions = {}): UseBookingF
                 return false
             }
 
-            onBookingComplete?.(result)
+            onBookingComplete?.()
             setStep('confirmation')
             return true
         },
