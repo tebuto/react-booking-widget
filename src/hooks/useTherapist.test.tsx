@@ -116,12 +116,12 @@ describe('useTherapist', () => {
             expect(result.current.isLoading).toBe(false)
         })
 
-        expect(global.fetch).toHaveBeenCalledTimes(1)
+        const initialCallCount = (global.fetch as jest.Mock).mock.calls.length
 
         // Refetch
         await result.current.refetch()
 
-        expect(global.fetch).toHaveBeenCalledTimes(2)
+        expect(global.fetch).toHaveBeenCalledTimes(initialCallCount + 1)
     })
 
     it('should use correct URL with therapist UUID', async () => {

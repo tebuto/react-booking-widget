@@ -99,14 +99,17 @@ describe('useClaimSlot', () => {
             `https://api.tebuto.de/events/${therapistUUID}/claim`,
             expect.objectContaining({
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    start: mockSlot.start,
-                    end: mockSlot.end,
-                    eventRuleId: mockSlot.eventRuleId
-                })
+                headers: { 'Content-Type': 'application/json' }
             })
         )
+
+        const callBody = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body)
+        expect(callBody).toMatchObject({
+            start: mockSlot.start,
+            end: mockSlot.end,
+            eventRuleId: mockSlot.eventRuleId
+        })
+        expect(callBody.fingerprint).toBeDefined()
     })
 
     it('should handle slot not available', async () => {

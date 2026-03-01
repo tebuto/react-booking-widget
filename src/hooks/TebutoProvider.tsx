@@ -1,6 +1,7 @@
-import { ReactNode, createContext, useContext, useMemo } from 'react'
+import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react'
 
 const TEBUTO_API_BASE_URL = 'https://api.tebuto.de'
+const FINGERPRINT_STORAGE_KEY = 'tebuto-fingerprint'
 
 type TebutoConfig = {
     therapistUUID: string
@@ -11,6 +12,7 @@ type TebutoConfig = {
 
 type TebutoContextValue = TebutoConfig & {
     buildUrl: (path: string) => string
+    fingerprint: string
 }
 
 const TebutoContext = createContext<TebutoContextValue | null>(null)
@@ -21,6 +23,25 @@ type TebutoProviderProps = {
     categories?: number[]
     includeSubusers?: boolean
     children: ReactNode
+}
+
+function useFingerprint(): string {
+    const [fingerprint, setFingerprint] = useState<string>('')
+
+    useEffect(() => {
+        if (typeof window === 'undefined') return
+
+        const stored = sessionStorage.getItem(FINGERPRINT_STORAGE_KEY)
+        if (stored) {
+            setFingerprint(stored)
+        } else {
+            const newFingerprint = crypto.randomUUID()
+            sessionStorage.setItem(FINGERPRINT_STORAGE_KEY, newFingerprint)
+            setFingerprint(newFingerprint)
+        }
+    }, [])
+
+    return fingerprint
 }
 
 /**
@@ -37,15 +58,18 @@ type TebutoProviderProps = {
  * ```
  */
 export function TebutoProvider({ therapistUUID, apiBaseUrl = TEBUTO_API_BASE_URL, categories, includeSubusers, children }: TebutoProviderProps) {
+    const fingerprint = useFingerprint()
+
     const value = useMemo<TebutoContextValue>(
         () => ({
             therapistUUID,
             apiBaseUrl,
             categories,
             includeSubusers,
-            buildUrl: (path: string) => `${apiBaseUrl}${path}`
+            buildUrl: (path: string) => `${apiBaseUrl}${path}`,
+            fingerprint
         }),
-        [therapistUUID, apiBaseUrl, categories, includeSubusers]
+        [therapistUUID, apiBaseUrl, categories, includeSubusers, fingerprint]
     )
 
     return <TebutoContext.Provider value={value}>{children}</TebutoContext.Provider>

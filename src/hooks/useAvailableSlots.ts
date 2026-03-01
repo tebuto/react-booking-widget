@@ -44,9 +44,15 @@ function enrichSlot(slot: TimeSlot): EnrichedTimeSlot {
     return {
         ...slot,
         dateKey: formatDate(startDate),
-        timeString: startDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }),
+        timeString: startDate.toLocaleTimeString('de-DE', {
+            hour: '2-digit',
+            minute: '2-digit'
+        }),
         durationMinutes,
-        formattedPrice: new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(Number.parseFloat(slot.price)),
+        formattedPrice: new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR'
+        }).format(Number.parseFloat(slot.price)),
         isToday: slotDay.getTime() === today.getTime(),
         isPast: startDate < now
     }
@@ -81,7 +87,7 @@ function enrichSlot(slot: TimeSlot): EnrichedTimeSlot {
  */
 export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAvailableSlotsReturn {
     const { autoFetch = true, categories: filterCategories } = options
-    const { therapistUUID, buildUrl, categories: contextCategories } = useTebutoContext()
+    const { therapistUUID, buildUrl, categories: contextCategories, fingerprint } = useTebutoContext()
 
     const [state, setState] = useState<AsyncState<TimeSlot[]>>({
         data: null,
@@ -94,10 +100,14 @@ export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAv
     const categoriesKey = categoriesToFilter?.join(',') ?? ''
 
     const fetchSlots = useCallback(async () => {
+        if (!fingerprint) return
+
         setState(prev => ({ ...prev, isLoading: true, error: null }))
 
         try {
             const url = new URL(buildUrl(`/events/${therapistUUID}`))
+
+            url.searchParams.set('fingerprint', fingerprint)
 
             if (categoriesKey) {
                 url.searchParams.set('categories', categoriesKey)
@@ -115,13 +125,13 @@ export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAv
             const error = err instanceof Error ? err : new Error('Unknown error occurred')
             setState({ data: null, isLoading: false, error })
         }
-    }, [therapistUUID, buildUrl, categoriesKey])
+    }, [therapistUUID, buildUrl, categoriesKey, fingerprint])
 
     useEffect(() => {
-        if (autoFetch) {
+        if (autoFetch && fingerprint) {
             void fetchSlots()
         }
-    }, [autoFetch, fetchSlots])
+    }, [autoFetch, fetchSlots, fingerprint])
 
     const slotsByDate = useMemo<SlotsByDate>(() => {
         if (!state.data) return {}

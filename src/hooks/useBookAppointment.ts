@@ -57,7 +57,7 @@ type UseBookAppointmentReturn = BookingState & {
  * ```
  */
 export function useBookAppointment(): UseBookAppointmentReturn {
-    const { therapistUUID, buildUrl } = useTebutoContext()
+    const { therapistUUID, buildUrl, fingerprint } = useTebutoContext()
     const [state, setState] = useState<BookingState>({
         booking: null,
         isLoading: false,
@@ -76,6 +76,7 @@ export function useBookAppointment(): UseBookAppointmentReturn {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
+                        fingerprint,
                         start: slot.start,
                         end: slot.end,
                         eventRuleId: slot.eventRuleId,
@@ -104,7 +105,7 @@ export function useBookAppointment(): UseBookAppointmentReturn {
                 return null
             }
         },
-        [therapistUUID, buildUrl]
+        [therapistUUID, buildUrl, fingerprint]
     )
 
     const reset = useCallback(() => {

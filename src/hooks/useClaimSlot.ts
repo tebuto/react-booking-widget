@@ -45,7 +45,7 @@ type UseClaimSlotReturn = ClaimState & {
  * ```
  */
 export function useClaimSlot(): UseClaimSlotReturn {
-    const { therapistUUID, buildUrl } = useTebutoContext()
+    const { therapistUUID, buildUrl, fingerprint } = useTebutoContext()
     const [state, setState] = useState<ClaimState>({
         claimedSlot: null,
         claimResponse: null,
@@ -66,7 +66,9 @@ export function useClaimSlot(): UseClaimSlotReturn {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    fingerprint,
                     start: state.claimedSlot.start,
+                    end: state.claimedSlot.end,
                     eventRuleId: state.claimedSlot.eventRuleId
                 })
             })
@@ -76,7 +78,7 @@ export function useClaimSlot(): UseClaimSlotReturn {
             claimKeyRef.current = null
             setState(prev => ({ ...prev, claimedSlot: null, claimResponse: null }))
         }
-    }, [state.claimedSlot, therapistUUID, buildUrl])
+    }, [state.claimedSlot, therapistUUID, buildUrl, fingerprint])
 
     const claim = useCallback(
         async (slot: TimeSlot): Promise<ClaimResponse | null> => {
@@ -102,6 +104,7 @@ export function useClaimSlot(): UseClaimSlotReturn {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
+                        fingerprint,
                         start: slot.start,
                         end: slot.end,
                         eventRuleId: slot.eventRuleId
@@ -138,7 +141,7 @@ export function useClaimSlot(): UseClaimSlotReturn {
                 return null
             }
         },
-        [therapistUUID, buildUrl, unclaim, state.claimResponse]
+        [therapistUUID, buildUrl, unclaim, state.claimResponse, fingerprint]
     )
 
     const isClaimed = useCallback(

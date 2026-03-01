@@ -118,16 +118,19 @@ describe('useBookAppointment', () => {
             `https://api.tebuto.de/events/${therapistUUID}/book`,
             expect.objectContaining({
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    start: mockSlot.start,
-                    end: mockSlot.end,
-                    eventRuleId: mockSlot.eventRuleId,
-                    locationSelection: mockSlot.location,
-                    ...mockClientInfo
-                })
+                headers: { 'Content-Type': 'application/json' }
             })
         )
+
+        const callBody = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body)
+        expect(callBody).toMatchObject({
+            start: mockSlot.start,
+            end: mockSlot.end,
+            eventRuleId: mockSlot.eventRuleId,
+            locationSelection: mockSlot.location,
+            ...mockClientInfo
+        })
+        expect(callBody.fingerprint).toBeDefined()
     })
 
     it('should use custom location selection when provided', async () => {
