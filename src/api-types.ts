@@ -56,6 +56,7 @@ export type ClaimResponse = {
     isAvailable: boolean
     requirePhoneNumber: boolean
     requireAddress: boolean
+    requireBirthdate: boolean
 }
 
 /** Payment configuration */
@@ -76,6 +77,7 @@ export type ClientInfo = {
         city: string
         zip: string
     }
+    birthdate?: string
     notes?: string
 }
 

@@ -55,10 +55,10 @@ function createMockSlots() {
     ]
 }
 
-function createWrapper(uuid = therapistUUID, categories?: number[]) {
+function createWrapper(uuid = therapistUUID, categories?: number[], includeSubusers?: boolean) {
     return function Wrapper({ children }: { children: ReactNode }) {
         return (
-            <TebutoProvider therapistUUID={uuid} categories={categories}>
+            <TebutoProvider therapistUUID={uuid} categories={categories} includeSubusers={includeSubusers}>
                 {children}
             </TebutoProvider>
         )
@@ -281,6 +281,50 @@ describe('useAvailableSlots', () => {
 
         const fetchUrl = (global.fetch as jest.Mock).mock.calls[0][0]
         expect(fetchUrl).toMatch(/categories=3/)
+    })
+
+    it('should pass includeSubusers query param when enabled', async () => {
+        const mockSlots = createMockSlots()
+        ;(global.fetch as jest.Mock).mockResolvedValue({
+            ok: true,
+            json: async () => mockSlots
+        })
+
+        renderHook(() => useAvailableSlots(), {
+            wrapper: createWrapper(therapistUUID, undefined, true)
+        })
+
+        await waitFor(
+            () => {
+                expect(global.fetch).toHaveBeenCalled()
+            },
+            { timeout: 1000 }
+        )
+
+        const fetchUrl = (global.fetch as jest.Mock).mock.calls[0][0]
+        expect(fetchUrl).toMatch(/includeSubusers=true/)
+    })
+
+    it('should not pass includeSubusers query param when not set', async () => {
+        const mockSlots = createMockSlots()
+        ;(global.fetch as jest.Mock).mockResolvedValue({
+            ok: true,
+            json: async () => mockSlots
+        })
+
+        renderHook(() => useAvailableSlots(), {
+            wrapper: createWrapper()
+        })
+
+        await waitFor(
+            () => {
+                expect(global.fetch).toHaveBeenCalled()
+            },
+            { timeout: 1000 }
+        )
+
+        const fetchUrl = (global.fetch as jest.Mock).mock.calls[0][0]
+        expect(fetchUrl).not.toMatch(/includeSubusers/)
     })
 
     it('should handle fetch errors', async () => {

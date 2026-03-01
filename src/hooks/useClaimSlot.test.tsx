@@ -57,7 +57,8 @@ describe('useClaimSlot', () => {
         const claimResponse = {
             isAvailable: true,
             requirePhoneNumber: false,
-            requireAddress: false
+            requireAddress: false,
+            requireBirthdate: false
         }
 
         ;(global.fetch as jest.Mock).mockResolvedValue({

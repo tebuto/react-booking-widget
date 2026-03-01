@@ -87,7 +87,7 @@ function enrichSlot(slot: TimeSlot): EnrichedTimeSlot {
  */
 export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAvailableSlotsReturn {
     const { autoFetch = true, categories: filterCategories } = options
-    const { therapistUUID, buildUrl, categories: contextCategories, fingerprint } = useTebutoContext()
+    const { therapistUUID, buildUrl, categories: contextCategories, includeSubusers, fingerprint } = useTebutoContext()
 
     const [state, setState] = useState<AsyncState<TimeSlot[]>>({
         data: null,
@@ -113,6 +113,10 @@ export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAv
                 url.searchParams.set('categories', categoriesKey)
             }
 
+            if (includeSubusers) {
+                url.searchParams.set('includeSubusers', 'true')
+            }
+
             const response = await fetch(url.toString())
 
             if (!response.ok) {
@@ -125,7 +129,7 @@ export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAv
             const error = err instanceof Error ? err : new Error('Unknown error occurred')
             setState({ data: null, isLoading: false, error })
         }
-    }, [therapistUUID, buildUrl, categoriesKey, fingerprint])
+    }, [therapistUUID, buildUrl, categoriesKey, includeSubusers, fingerprint])
 
     useEffect(() => {
         if (autoFetch && fingerprint) {
