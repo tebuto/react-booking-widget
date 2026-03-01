@@ -25,8 +25,13 @@ function createMockSlots() {
             color: '#00b4a9',
             price: '80.00',
             taxRate: '19',
+            outageFeeEnabled: false,
+            outageFeeHours: 0,
+            outageFeePrice: 0,
             eventRuleId: 1,
             eventCategoryId: 1,
+            paymentEnabled: false,
+            paymentDuringBooking: false,
             therapist: { id: 1, uuid: therapistUUID, name: 'Dr. Maria Müller' }
         }
     ]
