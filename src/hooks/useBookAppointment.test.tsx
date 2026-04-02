@@ -68,7 +68,7 @@ describe('useBookAppointment', () => {
             wrapper: createWrapper()
         })
 
-        let response: boolean
+        let response: boolean | undefined
         await act(async () => {
             response = await result.current.book({
                 slot: mockSlot,
@@ -76,7 +76,7 @@ describe('useBookAppointment', () => {
             })
         })
 
-        expect(response!).toBe(true)
+        expect(response).toBe(true)
         expect(result.current.isLoading).toBe(false)
         expect(result.current.isSuccess).toBe(true)
         expect(result.current.error).toBeNull()
@@ -150,7 +150,7 @@ describe('useBookAppointment', () => {
             wrapper: createWrapper()
         })
 
-        let response: boolean
+        let response: boolean | undefined
         await act(async () => {
             response = await result.current.book({
                 slot: mockSlot,
@@ -158,7 +158,7 @@ describe('useBookAppointment', () => {
             })
         })
 
-        expect(response!).toBe(false)
+        expect(response).toBe(false)
         expect(result.current.isSuccess).toBe(false)
         expect(result.current.error).toBeInstanceOf(Error)
         expect(result.current.error?.message).toBe('Booking failed: Conflict')
@@ -171,7 +171,7 @@ describe('useBookAppointment', () => {
             wrapper: createWrapper()
         })
 
-        let response: boolean
+        let response: boolean | undefined
         await act(async () => {
             response = await result.current.book({
                 slot: mockSlot,
@@ -179,7 +179,7 @@ describe('useBookAppointment', () => {
             })
         })
 
-        expect(response!).toBe(false)
+        expect(response).toBe(false)
         expect(result.current.error?.message).toBe('Network error')
     })
 
