@@ -21,7 +21,7 @@ describe('TebutoBookingWidget', () => {
         const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
         expect(script).not.toBeNull()
         expect(script.src).toBe(TEBUTO_BOOKING_WIDGET_SCRIPT_URL)
-        expect(script.getAttribute('data-therapist-uuid')).toBe(therapistUUID)
+        expect(script.dataset.therapistUuid).toBe(therapistUUID)
 
         const noscript = screen.getByTestId('tebuto-booking-widget-noscript')
         expect(noscript).not.toBeNull()
@@ -32,24 +32,24 @@ describe('TebutoBookingWidget', () => {
         const backgroundColor = '#ffffff'
         render(<TebutoBookingWidget therapistUUID={therapistUUID} backgroundColor={backgroundColor} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-background-color')).toBe(backgroundColor)
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.backgroundColor).toBe(backgroundColor)
     })
 
     it('should set the "data-border" attribute of the script tag to the value of the "border" prop', () => {
         const border = false
         render(<TebutoBookingWidget therapistUUID={therapistUUID} border={border} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-border')).toBe(border.toString())
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.border).toBe(border.toString())
     })
 
     it('should set the "data-categories" attribute of the script tag to the value of the "categories" prop', () => {
         const categories = [1, 2, 3]
         render(<TebutoBookingWidget therapistUUID={therapistUUID} categories={categories} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-categories')).toBe(categories.join(','))
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.categories).toBe(categories.join(','))
     })
 
     it('should set the noscript text to the value of the "noScriptText" prop', () => {
@@ -63,29 +63,29 @@ describe('TebutoBookingWidget', () => {
     it('should set the "data-include-subusers" attribute when includeSubusers is true', () => {
         render(<TebutoBookingWidget therapistUUID={therapistUUID} includeSubusers={true} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-include-subusers')).toBe('true')
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.includeSubusers).toBe('true')
     })
 
     it('should set the "data-include-subusers" attribute when includeSubusers is false', () => {
         render(<TebutoBookingWidget therapistUUID={therapistUUID} includeSubusers={false} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-include-subusers')).toBe('false')
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.includeSubusers).toBe('false')
     })
 
     it('should set the "data-show-quick-filters" attribute when showQuickFilters is true', () => {
         render(<TebutoBookingWidget therapistUUID={therapistUUID} showQuickFilters={true} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-show-quick-filters')).toBe('true')
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.showQuickFilters).toBe('true')
     })
 
     it('should set the "data-inherit-font" attribute when inheritFont is true', () => {
         render(<TebutoBookingWidget therapistUUID={therapistUUID} inheritFont={true} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-inherit-font')).toBe('true')
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.inheritFont).toBe('true')
     })
 
     it('should set theme attributes when theme is provided', () => {
@@ -97,11 +97,11 @@ describe('TebutoBookingWidget', () => {
         }
         render(<TebutoBookingWidget therapistUUID={therapistUUID} theme={theme} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-primary-color')).toBe(theme.primaryColor)
-        expect(script.getAttribute('data-text-primary')).toBe(theme.textPrimary)
-        expect(script.getAttribute('data-text-secondary')).toBe(theme.textSecondary)
-        expect(script.getAttribute('data-border-color')).toBe(theme.borderColor)
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.primaryColor).toBe(theme.primaryColor)
+        expect(script.dataset.textPrimary).toBe(theme.textPrimary)
+        expect(script.dataset.textSecondary).toBe(theme.textSecondary)
+        expect(script.dataset.borderColor).toBe(theme.borderColor)
     })
 
     it('should set all theme attributes when fully configured', () => {
@@ -115,13 +115,13 @@ describe('TebutoBookingWidget', () => {
         }
         render(<TebutoBookingWidget therapistUUID={therapistUUID} theme={theme} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-primary-color')).toBe(theme.primaryColor)
-        expect(script.getAttribute('data-background-color')).toBe(theme.backgroundColor)
-        expect(script.getAttribute('data-text-primary')).toBe(theme.textPrimary)
-        expect(script.getAttribute('data-text-secondary')).toBe(theme.textSecondary)
-        expect(script.getAttribute('data-border-color')).toBe(theme.borderColor)
-        expect(script.getAttribute('data-font-family')).toBe(theme.fontFamily)
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.primaryColor).toBe(theme.primaryColor)
+        expect(script.dataset.backgroundColor).toBe(theme.backgroundColor)
+        expect(script.dataset.textPrimary).toBe(theme.textPrimary)
+        expect(script.dataset.textSecondary).toBe(theme.textSecondary)
+        expect(script.dataset.borderColor).toBe(theme.borderColor)
+        expect(script.dataset.fontFamily).toBe(theme.fontFamily)
     })
 
     it('should prefer top-level backgroundColor over theme.backgroundColor', () => {
@@ -129,50 +129,50 @@ describe('TebutoBookingWidget', () => {
         const themeBg = '#00ff00'
         render(<TebutoBookingWidget therapistUUID={therapistUUID} backgroundColor={topLevelBg} theme={{ backgroundColor: themeBg }} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-background-color')).toBe(topLevelBg)
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.backgroundColor).toBe(topLevelBg)
     })
 
     it('should use theme.backgroundColor when top-level backgroundColor is not set', () => {
         const themeBg = '#00ff00'
         render(<TebutoBookingWidget therapistUUID={therapistUUID} theme={{ backgroundColor: themeBg }} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-background-color')).toBe(themeBg)
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.backgroundColor).toBe(themeBg)
     })
 
     it('should prefer top-level inheritFont over theme.inheritFont', () => {
         render(<TebutoBookingWidget therapistUUID={therapistUUID} inheritFont={true} theme={{ inheritFont: false }} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-inherit-font')).toBe('true')
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.inheritFont).toBe('true')
     })
 
     it('should use theme.inheritFont when top-level inheritFont is not set', () => {
         render(<TebutoBookingWidget therapistUUID={therapistUUID} theme={{ inheritFont: true }} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-inherit-font')).toBe('true')
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.inheritFont).toBe('true')
     })
 
     it('should not set optional attributes when not provided', () => {
         render(<TebutoBookingWidget therapistUUID={therapistUUID} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-therapist-uuid')).toBe(therapistUUID)
-        expect(script.getAttribute('data-background-color')).toBeNull()
-        expect(script.getAttribute('data-categories')).toBeNull()
-        expect(script.getAttribute('data-border')).toBeNull()
-        expect(script.getAttribute('data-include-subusers')).toBeNull()
-        expect(script.getAttribute('data-show-quick-filters')).toBeNull()
-        expect(script.getAttribute('data-inherit-font')).toBeNull()
-        expect(script.getAttribute('data-primary-color')).toBeNull()
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.therapistUuid).toBe(therapistUUID)
+        expect(script.dataset.backgroundColor).toBeUndefined()
+        expect(script.dataset.categories).toBeUndefined()
+        expect(script.dataset.border).toBeUndefined()
+        expect(script.dataset.includeSubusers).toBeUndefined()
+        expect(script.dataset.showQuickFilters).toBeUndefined()
+        expect(script.dataset.inheritFont).toBeUndefined()
+        expect(script.dataset.primaryColor).toBeUndefined()
     })
 
     it('should not set data-categories when categories array is empty', () => {
         render(<TebutoBookingWidget therapistUUID={therapistUUID} categories={[]} />)
 
-        const script = screen.getByTestId('tebuto-booking-widget-script')
-        expect(script.getAttribute('data-categories')).toBeNull()
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.categories).toBeUndefined()
     })
 })

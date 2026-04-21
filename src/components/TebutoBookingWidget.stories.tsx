@@ -4,6 +4,33 @@ import { TEBUTO_BOOKING_WIDGET_SCRIPT_URL } from '../constants'
 import { TebutoBookingWidgetConfiguration } from '../types'
 import TebutoBookingWidget from './TebutoBookingWidget'
 
+function applyScriptDataAttributes(script: HTMLScriptElement, config: TebutoBookingWidgetConfiguration): void {
+    script.dataset.therapistUuid = config.therapistUUID
+
+    const backgroundColor = config.backgroundColor ?? config.theme?.backgroundColor
+    if (backgroundColor) script.dataset.backgroundColor = backgroundColor
+
+    if (config.categories && config.categories.length > 0) {
+        script.dataset.categories = config.categories.join(',')
+    }
+
+    if (config.border !== undefined) script.dataset.border = String(config.border)
+    if (config.includeSubusers !== undefined) script.dataset.includeSubusers = String(config.includeSubusers)
+    if (config.showQuickFilters !== undefined) script.dataset.showQuickFilters = String(config.showQuickFilters)
+
+    const inheritFont = config.inheritFont ?? config.theme?.inheritFont
+    if (inheritFont !== undefined) script.dataset.inheritFont = String(inheritFont)
+
+    if (config.theme) {
+        const { primaryColor, textPrimary, textSecondary, borderColor, fontFamily } = config.theme
+        if (primaryColor) script.dataset.primaryColor = primaryColor
+        if (textPrimary) script.dataset.textPrimary = textPrimary
+        if (textSecondary) script.dataset.textSecondary = textSecondary
+        if (borderColor) script.dataset.borderColor = borderColor
+        if (fontFamily) script.dataset.fontFamily = fontFamily
+    }
+}
+
 /**
  * Live preview component that loads and renders the actual Tebuto widget.
  * MSW (Mock Service Worker) intercepts API calls to provide mock data.
@@ -11,7 +38,7 @@ import TebutoBookingWidget from './TebutoBookingWidget'
  * Important: The widget reads config from the SCRIPT tag's data attributes,
  * not from a div. So we set them on the script element.
  */
-function LiveWidgetPreview(props: TebutoBookingWidgetConfiguration) {
+function LiveWidgetPreview(props: Readonly<TebutoBookingWidgetConfiguration>) {
     const containerRef = useRef<HTMLDivElement>(null)
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(true)
@@ -22,43 +49,17 @@ function LiveWidgetPreview(props: TebutoBookingWidgetConfiguration) {
         setLoading(true)
         setError(null)
 
-        // Clear previous content
         containerRef.current.innerHTML = ''
 
-        // Create the widget container div (required by the widget)
         const widgetDiv = document.createElement('div')
         widgetDiv.id = 'tebuto-booking-widget'
         containerRef.current.appendChild(widgetDiv)
 
-        // Load the widget script with data attributes ON THE SCRIPT TAG
         const script = document.createElement('script')
         script.src = TEBUTO_BOOKING_WIDGET_SCRIPT_URL
         script.async = true
 
-        // Set data attributes on the SCRIPT tag (this is how the widget reads config)
-        script.setAttribute('data-therapist-uuid', props.therapistUUID)
-
-        const backgroundColor = props.backgroundColor ?? props.theme?.backgroundColor
-        if (backgroundColor) script.setAttribute('data-background-color', backgroundColor)
-
-        if (props.categories && props.categories.length > 0) {
-            script.setAttribute('data-categories', props.categories.join(','))
-        }
-
-        if (props.border !== undefined) script.setAttribute('data-border', String(props.border))
-        if (props.includeSubusers !== undefined) script.setAttribute('data-include-subusers', String(props.includeSubusers))
-        if (props.showQuickFilters !== undefined) script.setAttribute('data-show-quick-filters', String(props.showQuickFilters))
-
-        const inheritFont = props.inheritFont ?? props.theme?.inheritFont
-        if (inheritFont !== undefined) script.setAttribute('data-inherit-font', String(inheritFont))
-
-        if (props.theme) {
-            if (props.theme.primaryColor) script.setAttribute('data-primary-color', props.theme.primaryColor)
-            if (props.theme.textPrimary) script.setAttribute('data-text-primary', props.theme.textPrimary)
-            if (props.theme.textSecondary) script.setAttribute('data-text-secondary', props.theme.textSecondary)
-            if (props.theme.borderColor) script.setAttribute('data-border-color', props.theme.borderColor)
-            if (props.theme.fontFamily) script.setAttribute('data-font-family', props.theme.fontFamily)
-        }
+        applyScriptDataAttributes(script, props)
 
         script.onload = () => {
             setLoading(false)
@@ -72,7 +73,6 @@ function LiveWidgetPreview(props: TebutoBookingWidgetConfiguration) {
         containerRef.current.appendChild(script)
 
         return () => {
-            // Cleanup
             if (containerRef.current) {
                 containerRef.current.innerHTML = ''
             }
@@ -112,37 +112,39 @@ function LiveWidgetPreview(props: TebutoBookingWidgetConfiguration) {
     )
 }
 
+function pushThemeAttrs(attrs: string[], theme: NonNullable<TebutoBookingWidgetConfiguration['theme']>): void {
+    if (theme.primaryColor) attrs.push(`data-primary-color="${theme.primaryColor}"`)
+    if (theme.textPrimary) attrs.push(`data-text-primary="${theme.textPrimary}"`)
+    if (theme.textSecondary) attrs.push(`data-text-secondary="${theme.textSecondary}"`)
+    if (theme.borderColor) attrs.push(`data-border-color="${theme.borderColor}"`)
+    if (theme.fontFamily) attrs.push(`data-font-family="${theme.fontFamily}"`)
+}
+
+function buildHtmlDataAttributes(config: TebutoBookingWidgetConfiguration): string[] {
+    const attrs: string[] = [`data-therapist-uuid="${config.therapistUUID}"`]
+
+    const backgroundColor = config.backgroundColor ?? config.theme?.backgroundColor
+    if (backgroundColor) attrs.push(`data-background-color="${backgroundColor}"`)
+    if (config.categories && config.categories.length > 0) {
+        attrs.push(`data-categories="${config.categories.join(',')}"`)
+    }
+    if (config.border !== undefined) attrs.push(`data-border="${config.border}"`)
+    if (config.includeSubusers !== undefined) attrs.push(`data-include-subusers="${config.includeSubusers}"`)
+    if (config.showQuickFilters !== undefined) attrs.push(`data-show-quick-filters="${config.showQuickFilters}"`)
+
+    const inheritFont = config.inheritFont ?? config.theme?.inheritFont
+    if (inheritFont !== undefined) attrs.push(`data-inherit-font="${inheritFont}"`)
+
+    if (config.theme) pushThemeAttrs(attrs, config.theme)
+
+    return attrs
+}
+
 /**
  * Component that shows the generated HTML code for the widget.
  */
-function GeneratedCodePreview(props: TebutoBookingWidgetConfiguration) {
-    const buildDataAttributes = (config: TebutoBookingWidgetConfiguration): string[] => {
-        const attrs: string[] = [`data-therapist-uuid="${config.therapistUUID}"`]
-
-        const backgroundColor = config.backgroundColor ?? config.theme?.backgroundColor
-        if (backgroundColor) attrs.push(`data-background-color="${backgroundColor}"`)
-        if (config.categories && config.categories.length > 0) {
-            attrs.push(`data-categories="${config.categories.join(',')}"`)
-        }
-        if (config.border !== undefined) attrs.push(`data-border="${config.border}"`)
-        if (config.includeSubusers !== undefined) attrs.push(`data-include-subusers="${config.includeSubusers}"`)
-        if (config.showQuickFilters !== undefined) attrs.push(`data-show-quick-filters="${config.showQuickFilters}"`)
-
-        const inheritFont = config.inheritFont ?? config.theme?.inheritFont
-        if (inheritFont !== undefined) attrs.push(`data-inherit-font="${inheritFont}"`)
-
-        if (config.theme) {
-            if (config.theme.primaryColor) attrs.push(`data-primary-color="${config.theme.primaryColor}"`)
-            if (config.theme.textPrimary) attrs.push(`data-text-primary="${config.theme.textPrimary}"`)
-            if (config.theme.textSecondary) attrs.push(`data-text-secondary="${config.theme.textSecondary}"`)
-            if (config.theme.borderColor) attrs.push(`data-border-color="${config.theme.borderColor}"`)
-            if (config.theme.fontFamily) attrs.push(`data-font-family="${config.theme.fontFamily}"`)
-        }
-
-        return attrs
-    }
-
-    const attrs = buildDataAttributes(props)
+function GeneratedCodePreview(props: Readonly<TebutoBookingWidgetConfiguration>) {
+    const attrs = buildHtmlDataAttributes(props)
     const code = `<div id="tebuto-booking-widget"></div>
 <script
   src="${TEBUTO_BOOKING_WIDGET_SCRIPT_URL}"

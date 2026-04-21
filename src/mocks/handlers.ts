@@ -80,9 +80,6 @@ function generateMockEvents() {
     return events
 }
 
-// Store claimed events
-const claimedEvents = new Set<string>()
-
 export const handlers = [
     // Get therapist by UUID
     http.get('https://api.tebuto.de/therapists/uuid/:uuid', () => {
@@ -99,9 +96,7 @@ export const handlers = [
 
     // Claim an event slot
     http.post('https://api.tebuto.de/events/:uuid/claim', async ({ request }) => {
-        const body = (await request.json()) as { start: string; end: string; eventRuleId: number }
-        const key = `${body.start}-${body.eventRuleId}`
-        claimedEvents.add(key)
+        await request.json()
 
         return HttpResponse.json({
             isAvailable: true,
@@ -112,9 +107,7 @@ export const handlers = [
 
     // Unclaim an event slot
     http.post('https://api.tebuto.de/events/:uuid/unclaim', async ({ request }) => {
-        const body = (await request.json()) as { start: string; eventRuleId: number }
-        const key = `${body.start}-${body.eventRuleId}`
-        claimedEvents.delete(key)
+        await request.json()
 
         return HttpResponse.json({ success: true })
     }),

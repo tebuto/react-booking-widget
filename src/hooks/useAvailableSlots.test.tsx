@@ -68,7 +68,7 @@ function createWrapper(uuid = therapistUUID, categories?: number[], includeSubus
 describe('useAvailableSlots', () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        global.fetch = jest.fn()
+        globalThis.fetch = jest.fn()
     })
 
     afterEach(() => {
@@ -78,7 +78,7 @@ describe('useAvailableSlots', () => {
     it('should start with loading state when autoFetch is true', () => {
         // Mock that resolves immediately to avoid hanging
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -97,12 +97,12 @@ describe('useAvailableSlots', () => {
         })
 
         expect(result.current.isLoading).toBe(false)
-        expect(global.fetch).not.toHaveBeenCalled()
+        expect(globalThis.fetch).not.toHaveBeenCalled()
     })
 
     it('should fetch slots on mount', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -124,7 +124,7 @@ describe('useAvailableSlots', () => {
 
     it('should group slots by date', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -146,7 +146,7 @@ describe('useAvailableSlots', () => {
 
     it('should return available dates sorted', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -168,7 +168,7 @@ describe('useAvailableSlots', () => {
 
     it('should return enriched slots for a date', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -197,7 +197,7 @@ describe('useAvailableSlots', () => {
 
     it('should extract unique categories', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -219,7 +219,7 @@ describe('useAvailableSlots', () => {
 
     it('should return total slots count', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -240,7 +240,7 @@ describe('useAvailableSlots', () => {
 
     it('should filter by categories when provided in options', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -251,19 +251,19 @@ describe('useAvailableSlots', () => {
 
         await waitFor(
             () => {
-                expect(global.fetch).toHaveBeenCalled()
+                expect(globalThis.fetch).toHaveBeenCalled()
             },
             { timeout: 1000 }
         )
 
-        const fetchUrl = (global.fetch as jest.Mock).mock.calls[0][0]
+        const fetchUrl = (globalThis.fetch as jest.Mock).mock.calls[0][0]
         // URL encodes comma as %2C
         expect(fetchUrl).toMatch(/categories=1(%2C|,)2/)
     })
 
     it('should filter by categories from context', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -274,18 +274,18 @@ describe('useAvailableSlots', () => {
 
         await waitFor(
             () => {
-                expect(global.fetch).toHaveBeenCalled()
+                expect(globalThis.fetch).toHaveBeenCalled()
             },
             { timeout: 1000 }
         )
 
-        const fetchUrl = (global.fetch as jest.Mock).mock.calls[0][0]
+        const fetchUrl = (globalThis.fetch as jest.Mock).mock.calls[0][0]
         expect(fetchUrl).toMatch(/categories=3/)
     })
 
     it('should pass includeSubusers query param when enabled', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -296,18 +296,18 @@ describe('useAvailableSlots', () => {
 
         await waitFor(
             () => {
-                expect(global.fetch).toHaveBeenCalled()
+                expect(globalThis.fetch).toHaveBeenCalled()
             },
             { timeout: 1000 }
         )
 
-        const fetchUrl = (global.fetch as jest.Mock).mock.calls[0][0]
+        const fetchUrl = (globalThis.fetch as jest.Mock).mock.calls[0][0]
         expect(fetchUrl).toMatch(/includeSubusers=true/)
     })
 
     it('should not pass includeSubusers query param when not set', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -318,17 +318,17 @@ describe('useAvailableSlots', () => {
 
         await waitFor(
             () => {
-                expect(global.fetch).toHaveBeenCalled()
+                expect(globalThis.fetch).toHaveBeenCalled()
             },
             { timeout: 1000 }
         )
 
-        const fetchUrl = (global.fetch as jest.Mock).mock.calls[0][0]
+        const fetchUrl = (globalThis.fetch as jest.Mock).mock.calls[0][0]
         expect(fetchUrl).not.toMatch(/includeSubusers/)
     })
 
     it('should handle fetch errors', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: false,
             statusText: 'Internal Server Error'
         })
@@ -351,7 +351,7 @@ describe('useAvailableSlots', () => {
 
     it('should refetch data when refetch is called', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })
@@ -367,13 +367,13 @@ describe('useAvailableSlots', () => {
             { timeout: 1000 }
         )
 
-        expect(global.fetch).toHaveBeenCalledTimes(1)
+        expect(globalThis.fetch).toHaveBeenCalledTimes(1)
 
         await act(async () => {
             await result.current.refetch()
         })
 
-        expect(global.fetch).toHaveBeenCalledTimes(2)
+        expect(globalThis.fetch).toHaveBeenCalledTimes(2)
     })
 
     it('should filter out past slots', async () => {
@@ -392,7 +392,7 @@ describe('useAvailableSlots', () => {
         }
 
         const mockSlots = [...createMockSlots(), pastSlot]
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockSlots
         })

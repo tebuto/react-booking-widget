@@ -29,7 +29,7 @@ function useFingerprint(): string {
     const [fingerprint, setFingerprint] = useState<string>('')
 
     useEffect(() => {
-        if (typeof window === 'undefined') return
+        if (globalThis.window === undefined) return
 
         const stored = sessionStorage.getItem(FINGERPRINT_STORAGE_KEY)
         if (stored) {
@@ -57,7 +57,7 @@ function useFingerprint(): string {
  * </TebutoProvider>
  * ```
  */
-export function TebutoProvider({ therapistUUID, apiBaseUrl = TEBUTO_API_BASE_URL, categories, includeSubusers, children }: TebutoProviderProps) {
+export function TebutoProvider({ therapistUUID, apiBaseUrl = TEBUTO_API_BASE_URL, categories, includeSubusers, children }: Readonly<TebutoProviderProps>) {
     const fingerprint = useFingerprint()
 
     const value = useMemo<TebutoContextValue>(

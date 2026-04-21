@@ -30,23 +30,7 @@ type DataAttributes = {
     'data-font-family'?: string
 }
 
-function buildDataAttributes(config: TebutoBookingWidgetConfiguration): DataAttributes {
-    const attributes: DataAttributes = {
-        'data-therapist-uuid': config.therapistUUID
-    }
-
-    // Background color (top-level or from theme)
-    const backgroundColor = config.backgroundColor ?? config.theme?.backgroundColor
-    if (backgroundColor) {
-        attributes['data-background-color'] = backgroundColor
-    }
-
-    // Categories
-    if (config.categories && config.categories.length > 0) {
-        attributes['data-categories'] = config.categories.join(',')
-    }
-
-    // Boolean options
+function addBooleanAttributes(attributes: DataAttributes, config: TebutoBookingWidgetConfiguration): void {
     if (config.border !== undefined) {
         attributes['data-border'] = config.border ? 'true' : 'false'
     }
@@ -59,13 +43,28 @@ function buildDataAttributes(config: TebutoBookingWidgetConfiguration): DataAttr
         attributes['data-show-quick-filters'] = config.showQuickFilters ? 'true' : 'false'
     }
 
-    // Inherit font (top-level or from theme)
     const inheritFont = config.inheritFont ?? config.theme?.inheritFont
     if (inheritFont !== undefined) {
         attributes['data-inherit-font'] = inheritFont ? 'true' : 'false'
     }
+}
 
-    // Theme colors
+function buildDataAttributes(config: TebutoBookingWidgetConfiguration): DataAttributes {
+    const attributes: DataAttributes = {
+        'data-therapist-uuid': config.therapistUUID
+    }
+
+    const backgroundColor = config.backgroundColor ?? config.theme?.backgroundColor
+    if (backgroundColor) {
+        attributes['data-background-color'] = backgroundColor
+    }
+
+    if (config.categories && config.categories.length > 0) {
+        attributes['data-categories'] = config.categories.join(',')
+    }
+
+    addBooleanAttributes(attributes, config)
+
     if (config.theme) {
         addThemeAttributes(attributes, config.theme)
     }
@@ -95,7 +94,7 @@ function addThemeAttributes(attributes: DataAttributes, theme: TebutoWidgetTheme
     }
 }
 
-function TebutoBookingWidgetScript({ config }: { config: TebutoBookingWidgetConfiguration }): JSX.Element {
+function TebutoBookingWidgetScript({ config }: Readonly<{ config: TebutoBookingWidgetConfiguration }>): JSX.Element {
     const dataAttributes = buildDataAttributes(config)
 
     return <script src={TEBUTO_BOOKING_WIDGET_SCRIPT_URL} {...dataAttributes} data-testid="tebuto-booking-widget-script" />

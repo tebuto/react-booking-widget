@@ -40,7 +40,7 @@ function createWrapper() {
 describe('useClaimSlot', () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        global.fetch = jest.fn()
+        globalThis.fetch = jest.fn()
     })
 
     afterEach(() => {
@@ -66,7 +66,7 @@ describe('useClaimSlot', () => {
             requireBirthdate: false
         }
 
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => claimResponse
         })
@@ -88,7 +88,7 @@ describe('useClaimSlot', () => {
     })
 
     it('should call API with correct parameters', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({ isAvailable: true })
         })
@@ -101,7 +101,7 @@ describe('useClaimSlot', () => {
             await result.current.claim(mockSlot)
         })
 
-        expect(global.fetch).toHaveBeenCalledWith(
+        expect(globalThis.fetch).toHaveBeenCalledWith(
             `https://api.tebuto.de/events/${therapistUUID}/claim`,
             expect.objectContaining({
                 method: 'POST',
@@ -109,7 +109,7 @@ describe('useClaimSlot', () => {
             })
         )
 
-        const callBody = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body)
+        const callBody = JSON.parse((globalThis.fetch as jest.Mock).mock.calls[0][1].body)
         expect(callBody).toMatchObject({
             start: mockSlot.start,
             end: mockSlot.end,
@@ -119,7 +119,7 @@ describe('useClaimSlot', () => {
     })
 
     it('should handle slot not available', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({ isAvailable: false })
         })
@@ -139,7 +139,7 @@ describe('useClaimSlot', () => {
     })
 
     it('should handle API errors', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: false,
             statusText: 'Internal Server Error'
         })
@@ -159,7 +159,7 @@ describe('useClaimSlot', () => {
     })
 
     it('should unclaim current slot before claiming new one', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({ isAvailable: true })
         })
@@ -176,8 +176,8 @@ describe('useClaimSlot', () => {
         expect(result.current.claimedSlot).toEqual(mockSlot)
 
         // Reset mock calls
-        ;(global.fetch as jest.Mock).mockClear()
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockClear()
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({ isAvailable: true })
         })
@@ -188,12 +188,12 @@ describe('useClaimSlot', () => {
         })
 
         // Should have called unclaim then claim
-        expect(global.fetch).toHaveBeenCalledTimes(2)
+        expect(globalThis.fetch).toHaveBeenCalledTimes(2)
         expect(result.current.claimedSlot).toEqual(mockSlot2)
     })
 
     it('should not refetch when claiming same slot', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({ isAvailable: true })
         })
@@ -207,18 +207,18 @@ describe('useClaimSlot', () => {
             await result.current.claim(mockSlot)
         })
 
-        expect(global.fetch).toHaveBeenCalledTimes(1)
+        expect(globalThis.fetch).toHaveBeenCalledTimes(1)
 
         // Claim same slot again - should return cached response
         await act(async () => {
             await result.current.claim(mockSlot)
         })
 
-        expect(global.fetch).toHaveBeenCalledTimes(1) // No additional calls
+        expect(globalThis.fetch).toHaveBeenCalledTimes(1) // No additional calls
     })
 
     it('should unclaim slot', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({ isAvailable: true })
         })
@@ -244,7 +244,7 @@ describe('useClaimSlot', () => {
     })
 
     it('should check if a slot is claimed', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({ isAvailable: true })
         })
@@ -264,7 +264,7 @@ describe('useClaimSlot', () => {
     })
 
     it('should clear error', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: false,
             statusText: 'Error'
         })
@@ -288,7 +288,7 @@ describe('useClaimSlot', () => {
 
     it('should set loading state during claim', async () => {
         let resolvePromise: (value: unknown) => void = () => {}
-        ;(global.fetch as jest.Mock).mockImplementation(
+        ;(globalThis.fetch as jest.Mock).mockImplementation(
             () =>
                 new Promise(resolve => {
                     resolvePromise = resolve

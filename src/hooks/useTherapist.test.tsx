@@ -29,7 +29,7 @@ function createWrapper(uuid = therapistUUID) {
 describe('useTherapist', () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        global.fetch = jest.fn()
+        globalThis.fetch = jest.fn()
     })
 
     afterEach(() => {
@@ -37,7 +37,7 @@ describe('useTherapist', () => {
     })
 
     it('should start with loading state', () => {
-        ;(global.fetch as jest.Mock).mockImplementation(() => new Promise(() => {})) // Never resolves
+        ;(globalThis.fetch as jest.Mock).mockImplementation(() => new Promise(() => {})) // Never resolves
 
         const { result } = renderHook(() => useTherapist(), {
             wrapper: createWrapper()
@@ -49,7 +49,7 @@ describe('useTherapist', () => {
     })
 
     it('should fetch therapist data on mount', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockTherapist
         })
@@ -64,11 +64,11 @@ describe('useTherapist', () => {
 
         expect(result.current.data).toEqual(mockTherapist)
         expect(result.current.error).toBeNull()
-        expect(global.fetch).toHaveBeenCalledWith(`https://api.tebuto.de/therapists/uuid/${therapistUUID}`)
+        expect(globalThis.fetch).toHaveBeenCalledWith(`https://api.tebuto.de/therapists/uuid/${therapistUUID}`)
     })
 
     it('should handle fetch errors', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: false,
             statusText: 'Not Found'
         })
@@ -87,7 +87,7 @@ describe('useTherapist', () => {
     })
 
     it('should handle network errors', async () => {
-        ;(global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'))
+        ;(globalThis.fetch as jest.Mock).mockRejectedValue(new Error('Network error'))
 
         const { result } = renderHook(() => useTherapist(), {
             wrapper: createWrapper()
@@ -103,7 +103,7 @@ describe('useTherapist', () => {
     })
 
     it('should refetch data when refetch is called', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockTherapist
         })
@@ -116,17 +116,17 @@ describe('useTherapist', () => {
             expect(result.current.isLoading).toBe(false)
         })
 
-        const initialCallCount = (global.fetch as jest.Mock).mock.calls.length
+        const initialCallCount = (globalThis.fetch as jest.Mock).mock.calls.length
 
         // Refetch
         await result.current.refetch()
 
-        expect(global.fetch).toHaveBeenCalledTimes(initialCallCount + 1)
+        expect(globalThis.fetch).toHaveBeenCalledTimes(initialCallCount + 1)
     })
 
     it('should use correct URL with therapist UUID', async () => {
         const customUUID = 'custom-uuid-12345'
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => mockTherapist
         })
@@ -136,7 +136,7 @@ describe('useTherapist', () => {
         })
 
         await waitFor(() => {
-            expect(global.fetch).toHaveBeenCalledWith(`https://api.tebuto.de/therapists/uuid/${customUUID}`)
+            expect(globalThis.fetch).toHaveBeenCalledWith(`https://api.tebuto.de/therapists/uuid/${customUUID}`)
         })
     })
 })

@@ -135,7 +135,7 @@ export function useAvailableSlots(options: UseAvailableSlotsOptions = {}): UseAv
 
     useEffect(() => {
         if (autoFetch && fingerprint) {
-            void fetchSlots()
+            fetchSlots().catch(() => {})
         }
     }, [autoFetch, fetchSlots, fingerprint])
 

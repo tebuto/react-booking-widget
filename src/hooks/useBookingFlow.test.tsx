@@ -46,7 +46,7 @@ function createWrapper() {
 describe('useBookingFlow', () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        global.fetch = jest.fn()
+        globalThis.fetch = jest.fn()
     })
 
     afterEach(() => {
@@ -54,7 +54,7 @@ describe('useBookingFlow', () => {
     })
 
     it('should start in loading state', () => {
-        ;(global.fetch as jest.Mock).mockImplementation(() => new Promise(() => {}))
+        ;(globalThis.fetch as jest.Mock).mockImplementation(() => new Promise(() => {}))
 
         const { result } = renderHook(() => useBookingFlow(), {
             wrapper: createWrapper()
@@ -66,7 +66,7 @@ describe('useBookingFlow', () => {
 
     it('should transition to date-selection after data loads', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,
@@ -95,7 +95,7 @@ describe('useBookingFlow', () => {
     })
 
     it('should transition to error state on fetch failure', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: false,
             statusText: 'Internal Server Error'
         })
@@ -113,7 +113,7 @@ describe('useBookingFlow', () => {
 
     it('should select date and move to time-selection', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,
@@ -147,7 +147,7 @@ describe('useBookingFlow', () => {
 
     it('should get slots for selected date', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,
@@ -180,7 +180,7 @@ describe('useBookingFlow', () => {
 
     it('should select slot and move to booking-form', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,
@@ -227,7 +227,7 @@ describe('useBookingFlow', () => {
         const mockSlots = createMockSlots()
         mockSlots[0].location = 'not-fixed'
 
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,
@@ -277,7 +277,7 @@ describe('useBookingFlow', () => {
 
     it('should submit booking and move to confirmation', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,
@@ -339,7 +339,7 @@ describe('useBookingFlow', () => {
 
     it('should return false when slot claim fails', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,
@@ -384,7 +384,7 @@ describe('useBookingFlow', () => {
 
     it('should reset flow', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,
@@ -435,7 +435,7 @@ describe('useBookingFlow', () => {
 
     it('should go to specific step', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,
@@ -465,7 +465,7 @@ describe('useBookingFlow', () => {
 
     it('should deselect slot', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,
@@ -514,7 +514,7 @@ describe('useBookingFlow', () => {
 
     it('should clear date selection', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,
@@ -553,7 +553,7 @@ describe('useBookingFlow', () => {
 
     it('should expose individual hook states', async () => {
         const mockSlots = createMockSlots()
-        ;(global.fetch as jest.Mock).mockImplementation(url => {
+        ;(globalThis.fetch as jest.Mock).mockImplementation(url => {
             if (url.includes('/therapists/')) {
                 return Promise.resolve({
                     ok: true,

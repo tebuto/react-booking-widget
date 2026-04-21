@@ -41,7 +41,7 @@ function createWrapper() {
 describe('useBookAppointment', () => {
     beforeEach(() => {
         jest.clearAllMocks()
-        global.fetch = jest.fn()
+        globalThis.fetch = jest.fn()
     })
 
     afterEach(() => {
@@ -59,7 +59,7 @@ describe('useBookAppointment', () => {
     })
 
     it('should submit booking request successfully', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({})
         })
@@ -83,7 +83,7 @@ describe('useBookAppointment', () => {
     })
 
     it('should call API with correct parameters', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({})
         })
@@ -99,7 +99,7 @@ describe('useBookAppointment', () => {
             })
         })
 
-        expect(global.fetch).toHaveBeenCalledWith(
+        expect(globalThis.fetch).toHaveBeenCalledWith(
             `https://api.tebuto.de/events/${therapistUUID}/book`,
             expect.objectContaining({
                 method: 'POST',
@@ -107,7 +107,7 @@ describe('useBookAppointment', () => {
             })
         )
 
-        const callBody = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body)
+        const callBody = JSON.parse((globalThis.fetch as jest.Mock).mock.calls[0][1].body)
         expect(callBody).toMatchObject({
             start: mockSlot.start,
             end: mockSlot.end,
@@ -119,7 +119,7 @@ describe('useBookAppointment', () => {
     })
 
     it('should use custom location selection when provided', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({})
         })
@@ -136,12 +136,12 @@ describe('useBookAppointment', () => {
             })
         })
 
-        const callBody = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body)
+        const callBody = JSON.parse((globalThis.fetch as jest.Mock).mock.calls[0][1].body)
         expect(callBody.locationSelection).toBe('virtual')
     })
 
     it('should handle booking errors', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: false,
             statusText: 'Conflict'
         })
@@ -165,7 +165,7 @@ describe('useBookAppointment', () => {
     })
 
     it('should handle network errors', async () => {
-        ;(global.fetch as jest.Mock).mockRejectedValue(new Error('Network error'))
+        ;(globalThis.fetch as jest.Mock).mockRejectedValue(new Error('Network error'))
 
         const { result } = renderHook(() => useBookAppointment(), {
             wrapper: createWrapper()
@@ -184,7 +184,7 @@ describe('useBookAppointment', () => {
     })
 
     it('should reset state', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({})
         })
@@ -213,7 +213,7 @@ describe('useBookAppointment', () => {
 
     it('should set loading state during booking', async () => {
         let resolvePromise: (value: unknown) => void = () => {}
-        ;(global.fetch as jest.Mock).mockImplementation(
+        ;(globalThis.fetch as jest.Mock).mockImplementation(
             () =>
                 new Promise(resolve => {
                     resolvePromise = resolve
@@ -246,7 +246,7 @@ describe('useBookAppointment', () => {
     })
 
     it('should handle booking without optional fields', async () => {
-        ;(global.fetch as jest.Mock).mockResolvedValue({
+        ;(globalThis.fetch as jest.Mock).mockResolvedValue({
             ok: true,
             json: async () => ({})
         })
@@ -268,7 +268,7 @@ describe('useBookAppointment', () => {
             })
         })
 
-        const callBody = JSON.parse((global.fetch as jest.Mock).mock.calls[0][1].body)
+        const callBody = JSON.parse((globalThis.fetch as jest.Mock).mock.calls[0][1].body)
         expect(callBody.firstName).toBe('Max')
         expect(callBody.phone).toBeUndefined()
         expect(callBody.notes).toBeUndefined()

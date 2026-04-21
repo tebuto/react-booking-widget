@@ -71,7 +71,7 @@ function LoadingState() {
     )
 }
 
-function StepIndicator({ current, total }: { current: number; total: number }) {
+function StepIndicator({ current, total }: Readonly<{ current: number; total: number }>) {
     return (
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 32 }}>
             {Array.from({ length: total }, (_, i) => (
@@ -102,7 +102,7 @@ type CalendarProps = {
     onSelectDate: (date: Date) => void
 }
 
-function Calendar({ availableDates, selectedDate, onSelectDate }: CalendarProps) {
+function Calendar({ availableDates, selectedDate, onSelectDate }: Readonly<CalendarProps>) {
     const [viewDate, setViewDate] = useState(() => {
         // Start with the first available date's month, or current month
         return availableDates.length > 0 ? new Date(availableDates[0]) : new Date()
@@ -273,60 +273,80 @@ function Calendar({ availableDates, selectedDate, onSelectDate }: CalendarProps)
 
             {/* Calendar Grid */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                {weeks.map((week, weekIndex) => (
-                    <div key={weekIndex} style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4 }}>
-                        {week.map((day, dayIndex) => {
-                            if (day === null) {
-                                return <div key={dayIndex} style={{ aspectRatio: '1', minHeight: 44 }} />
-                            }
+                {weeks.map(week => {
+                    const firstDay = week.find(d => d !== null) ?? 0
+                    const weekKey = `${year}-${month}-w${firstDay}`
+                    return (
+                        <div key={weekKey} style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4 }}>
+                            {week.map((day, dayIndex) => {
+                                if (day === null) {
+                                    return <div key={`${weekKey}-empty-${dayIndex}`} style={{ aspectRatio: '1', minHeight: 44 }} />
+                                }
 
-                            const available = isDateAvailable(day)
-                            const selected = isDateSelected(day)
-                            const todayMark = isToday(day)
+                                const available = isDateAvailable(day)
+                                const selected = isDateSelected(day)
+                                const todayMark = isToday(day)
 
-                            return (
-                                <button
-                                    key={dayIndex}
-                                    type="button"
-                                    onClick={() => handleDateClick(day)}
-                                    disabled={!available}
-                                    style={{
-                                        aspectRatio: '1',
-                                        minHeight: 44,
-                                        border: selected ? '2px solid var(--booking-accent)' : todayMark ? '1px solid var(--booking-accent)' : '1px solid transparent',
-                                        borderRadius: 'var(--booking-radius-sm)',
-                                        background: selected ? 'var(--booking-accent)' : available ? 'var(--booking-surface-elevated)' : 'transparent',
-                                        color: selected ? '#000' : available ? 'var(--booking-text)' : 'var(--booking-text-subtle)',
-                                        cursor: available ? 'pointer' : 'default',
-                                        fontSize: 14,
-                                        fontWeight: selected ? 600 : available ? 500 : 400,
-                                        fontFamily: 'inherit',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        transition: 'var(--booking-transition)',
-                                        opacity: available ? 1 : 0.35,
-                                        position: 'relative'
-                                    }}
-                                >
-                                    {day}
-                                    {available && !selected && (
-                                        <span
-                                            style={{
-                                                position: 'absolute',
-                                                bottom: 6,
-                                                width: 4,
-                                                height: 4,
-                                                borderRadius: '50%',
-                                                background: 'var(--booking-accent)'
-                                            }}
-                                        />
-                                    )}
-                                </button>
-                            )
-                        })}
-                    </div>
-                ))}
+                                let borderStyle = '1px solid transparent'
+                                if (selected) borderStyle = '2px solid var(--booking-accent)'
+                                else if (todayMark) borderStyle = '1px solid var(--booking-accent)'
+
+                                let backgroundStyle = 'transparent'
+                                if (selected) backgroundStyle = 'var(--booking-accent)'
+                                else if (available) backgroundStyle = 'var(--booking-surface-elevated)'
+
+                                let colorStyle = 'var(--booking-text-subtle)'
+                                if (selected) colorStyle = '#000'
+                                else if (available) colorStyle = 'var(--booking-text)'
+
+                                let fontWeightStyle = 400
+                                if (selected) fontWeightStyle = 600
+                                else if (available) fontWeightStyle = 500
+
+                                return (
+                                    <button
+                                        key={`${year}-${month}-${day}`}
+                                        type="button"
+                                        onClick={() => handleDateClick(day)}
+                                        disabled={!available}
+                                        style={{
+                                            aspectRatio: '1',
+                                            minHeight: 44,
+                                            border: borderStyle,
+                                            borderRadius: 'var(--booking-radius-sm)',
+                                            background: backgroundStyle,
+                                            color: colorStyle,
+                                            cursor: available ? 'pointer' : 'default',
+                                            fontSize: 14,
+                                            fontWeight: fontWeightStyle,
+                                            fontFamily: 'inherit',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            transition: 'var(--booking-transition)',
+                                            opacity: available ? 1 : 0.35,
+                                            position: 'relative'
+                                        }}
+                                    >
+                                        {day}
+                                        {available && !selected && (
+                                            <span
+                                                style={{
+                                                    position: 'absolute',
+                                                    bottom: 6,
+                                                    width: 4,
+                                                    height: 4,
+                                                    borderRadius: '50%',
+                                                    background: 'var(--booking-accent)'
+                                                }}
+                                            />
+                                        )}
+                                    </button>
+                                )
+                            })}
+                        </div>
+                    )
+                })}
             </div>
 
             {/* Legend */}
@@ -351,7 +371,7 @@ function Calendar({ availableDates, selectedDate, onSelectDate }: CalendarProps)
                             background: 'var(--booking-accent)'
                         }}
                     />
-                    Termine verfügbar
+                    <span>Termine verfügbar</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                     <span
@@ -363,7 +383,7 @@ function Calendar({ availableDates, selectedDate, onSelectDate }: CalendarProps)
                             opacity: 0.35
                         }}
                     />
-                    Keine Termine
+                    <span>Keine Termine</span>
                 </div>
             </div>
         </div>
@@ -382,7 +402,7 @@ type TimeSlotPickerProps = {
     onBack: () => void
 }
 
-function TimeSlotPicker({ slots, selectedSlot, onSelectSlot, selectedDate, onBack }: TimeSlotPickerProps) {
+function TimeSlotPicker({ slots, selectedSlot, onSelectSlot, selectedDate, onBack }: Readonly<TimeSlotPickerProps>) {
     const getLocationIcon = (location: AppointmentLocation) => {
         switch (location) {
             case 'virtual':
@@ -602,7 +622,7 @@ type BookingFormProps = {
     error: Error | null
 }
 
-function BookingForm({ slot, showLocationSelector, selectedLocation, onLocationChange, onSubmit, onBack, isLoading, error }: BookingFormProps) {
+function BookingForm({ slot, showLocationSelector, selectedLocation, onLocationChange, onSubmit, onBack, isLoading, error }: Readonly<BookingFormProps>) {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -971,7 +991,7 @@ type ConfirmationProps = {
     onReset: () => void
 }
 
-function Confirmation({ slot, onReset }: ConfirmationProps) {
+function Confirmation({ slot, onReset }: Readonly<ConfirmationProps>) {
     const formatDateLong = (dateStr: string) => {
         return new Date(dateStr).toLocaleDateString('de-DE', {
             weekday: 'long',
@@ -1210,7 +1230,7 @@ function BookingInterface() {
                                     >
                                         📅
                                     </span>
-                                    Datum wählen
+                                    <span>Datum wählen</span>
                                 </h3>
                                 <Calendar availableDates={slots.availableDates} selectedDate={selectedDate} onSelectDate={selectDate} />
                             </div>
@@ -1283,7 +1303,7 @@ type CustomBookingExampleProps = {
  * }
  * ```
  */
-export function CustomBookingExample({ therapistUUID, categories }: CustomBookingExampleProps) {
+export function CustomBookingExample({ therapistUUID, categories }: Readonly<CustomBookingExampleProps>) {
     return (
         <TebutoProvider therapistUUID={therapistUUID} categories={categories}>
             <BookingInterface />

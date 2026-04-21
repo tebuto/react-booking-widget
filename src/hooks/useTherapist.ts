@@ -49,7 +49,7 @@ export function useTherapist(): UseTherapistReturn {
     }, [therapistUUID, buildUrl])
 
     useEffect(() => {
-        void fetchTherapist()
+        fetchTherapist().catch(() => {})
     }, [fetchTherapist])
 
     return {
