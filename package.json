@@ -20,37 +20,37 @@
         "biome:migrate": "biome migrate --write"
     },
     "peerDependencies": {
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0"
+        "react": "^19",
+        "react-dom": "^19"
     },
     "devDependencies": {
         "@babel/core": "7.29.0",
         "@babel/preset-env": "7.29.2",
         "@babel/preset-react": "7.28.5",
         "@babel/preset-typescript": "7.28.5",
-        "@biomejs/biome": "2.4.10",
+        "@biomejs/biome": "2.4.12",
         "@rollup/plugin-commonjs": "29.0.2",
         "@rollup/plugin-node-resolve": "16.0.3",
         "@rollup/plugin-terser": "1.0.0",
         "@rollup/plugin-typescript": "12.3.0",
-        "@storybook/react": "^10.1.10",
-        "@storybook/react-vite": "^10.1.10",
+        "@storybook/react": "10.3.5",
+        "@storybook/react-vite": "10.3.5",
         "@testing-library/react": "16.3.2",
         "@types/jest": "30.0.0",
         "@types/react": "19.2.14",
-        "@vitejs/plugin-react": "^6.0.1",
+        "@vitejs/plugin-react": "6.0.1",
         "babel-jest": "30.3.0",
         "husky": "9.1.7",
         "jest": "30.3.0",
         "jest-environment-jsdom": "30.3.0",
-        "msw": "^2.12.6",
-        "rollup": "4.60.1",
+        "msw": "2.13.4",
+        "rollup": "4.60.2",
         "rollup-plugin-dts": "6.4.1",
         "rollup-plugin-peer-deps-external": "2.2.4",
-        "storybook": "^10.1.10",
+        "storybook": "10.3.5",
         "tslib": "2.8.1",
-        "typescript": "6.0.2",
-        "vite": "^8.0.3"
+        "typescript": "6.0.3",
+        "vite": "8.0.9"
     },
     "jest": {
         "testEnvironment": "jsdom",
