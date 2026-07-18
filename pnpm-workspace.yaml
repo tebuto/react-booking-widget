@@ -1,5 +1,11 @@
+allowBuilds:
+  esbuild: false
+  msw: false
+  unrs-resolver: false
 ignoredBuiltDependencies:
   - esbuild
   - msw
 onlyBuiltDependencies:
   - unrs-resolver
+overrides:
+  '@babel/core': 8.0.1
