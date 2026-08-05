@@ -1,7 +1,7 @@
 {
     "name": "@tebuto/react-booking-widget",
-    "version": "1.3.7",
-    "description": "React Component for the Tebuto Booking Widget",
+    "version": "1.4.0",
+    "description": "React components for the Tebuto booking and seminars widgets",
     "author": "Artus Engineering GmbH",
     "homepage": "https://tebuto.de",
     "license": "MIT",

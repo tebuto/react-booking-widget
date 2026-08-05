@@ -43,3 +43,26 @@ export type TebutoBookingWidgetConfiguration = {
     /** Theme configuration for customizing colors and fonts */
     theme?: TebutoWidgetTheme
 }
+
+/**
+ * Configuration options for the Tebuto Seminars Widget.
+ */
+export type TebutoSeminarsWidgetConfiguration = {
+    /** UUID of the therapist whose seminars should be displayed (required) */
+    therapistUUID: string
+    /** Background color of the widget (shorthand for theme.backgroundColor) */
+    backgroundColor?: string
+    /** Filter to these seminar slugs; omit to show all published seminars */
+    seminarSlugs?: string[]
+    /** Whether to display a border around the widget (default: true) */
+    border?: boolean
+    /**
+     * When false and exactly one seminar is in scope, skip the list and open that seminar.
+     * Default: true (always show the list first when multiple seminars exist).
+     */
+    showListFirst?: boolean
+    /** Inherit font from parent page instead of using widget font (default: false) */
+    inheritFont?: boolean
+    /** Theme configuration for customizing colors and fonts */
+    theme?: TebutoWidgetTheme
+}

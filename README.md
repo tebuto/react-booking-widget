@@ -2,7 +2,7 @@
   <img alt="Tebuto" src="https://tebuto.de/assets/logo.svg" width="400" />
 </div>
 
-<p align="center">A <a href="https://react.dev" target="_blank">React</a> library for integrating <a href="https://tebuto.de" target="_blank">Tebuto</a> appointment booking into your website.</p>
+<p align="center">A <a href="https://react.dev" target="_blank">React</a> library for integrating <a href="https://tebuto.de" target="_blank">Tebuto</a> appointment booking and seminar registration into your website.</p>
 
 <div align="center">
   <a href="https://www.npmjs.com/package/@tebuto/react-booking-widget"><img alt="NPM Version" src="https://img.shields.io/npm/v/%40tebuto%2Freact-booking-widget"></a>
@@ -20,6 +20,8 @@
 - [Widget Configuration](#widget-configuration)
   - [Props Reference](#props-reference)
   - [Theme Configuration](#theme-configuration)
+- [Seminars Widget](#seminars-widget)
+  - [Seminars Props Reference](#seminars-props-reference)
 - [Building Custom Booking UIs](#building-custom-booking-uis)
   - [TebutoProvider](#tebutoprovider)
   - [useBookingFlow Hook](#usebookingflow-hook)
@@ -34,7 +36,8 @@
 
 ## Features
 
-- **Drop-in Widget** - Embed the Tebuto booking widget with a single component
+- **Drop-in Booking Widget** - Embed the Tebuto booking widget with a single component
+- **Drop-in Seminars Widget** - Embed seminar listing and registration the same way
 - **Custom Booking UIs** - Build your own booking interface with powerful React hooks
 - **Full TypeScript Support** - Complete type definitions for all APIs
 - **Theming** - Customize colors, fonts, and styles to match your brand
@@ -119,6 +122,45 @@ function BookingPage() {
 | `borderColor`     | `string`  | Border color                                |
 | `fontFamily`      | `string`  | Font family for the widget                  |
 | `inheritFont`     | `boolean` | Inherit font from parent page               |
+
+## Seminars Widget
+
+Embed seminar listing and registration with the same package:
+
+```tsx
+import { TebutoSeminarsWidget } from "@tebuto/react-booking-widget";
+
+function SeminarsPage() {
+  return (
+    <TebutoSeminarsWidget
+      therapistUUID="your-uuid"
+      seminarSlugs={["einfuehrungsseminar"]}
+      showListFirst={false}
+      theme={{
+        primaryColor: "#00B4A9",
+        backgroundColor: "#ffffff",
+        textPrimary: "#374151",
+        textSecondary: "#6b7280",
+      }}
+    />
+  );
+}
+```
+
+> **Note:** Obtain the therapist UUID and seminar slugs from the seminar embedding section in the Tebuto app (`Seminare` → Buchung).
+
+### Seminars Props Reference
+
+| Prop              | Type                | Required | Default         | Description                                                                 |
+| ----------------- | ------------------- | -------- | --------------- | --------------------------------------------------------------------------- |
+| `therapistUUID`   | `string`            | Yes      | -               | Unique identifier for the therapist                                         |
+| `backgroundColor` | `string`            | No       | `transparent`   | Background color (hex, rgb, etc.)                                           |
+| `seminarSlugs`    | `string[]`          | No       | all seminars    | Filter to these seminar slugs                                               |
+| `border`          | `boolean`           | No       | `true`          | Show border around the widget                                               |
+| `showListFirst`   | `boolean`           | No       | `true`          | When `false` and exactly one seminar is in scope, skip the list             |
+| `inheritFont`     | `boolean`           | No       | `false`         | Use parent page font instead of widget font                                 |
+| `theme`           | `TebutoWidgetTheme` | No       | -               | Theme customization object (same as booking)                                |
+| `noScriptText`    | `string`            | No       | Default message | Text shown when JavaScript is disabled                                      |
 
 ## Building Custom Booking UIs
 
@@ -317,6 +359,7 @@ All types are exported for TypeScript users:
 import type {
   // Configuration
   TebutoBookingWidgetConfiguration,
+  TebutoSeminarsWidgetConfiguration,
   TebutoWidgetTheme,
 
   // API Data
@@ -335,7 +378,6 @@ import type {
   AsyncState,
 } from "@tebuto/react-booking-widget";
 ```
-
 ## License
 
 [MIT](LICENSE)
