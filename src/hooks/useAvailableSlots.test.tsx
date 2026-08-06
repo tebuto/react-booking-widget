@@ -141,7 +141,7 @@ describe('useAvailableSlots', () => {
         )
 
         // Should have 2 unique dates (tomorrow and day after)
-        expect(Object.keys(result.current.slotsByDate).length).toBe(2)
+        expect(Object.keys(result.current.slotsByDate)).toHaveLength(2)
     })
 
     it('should return available dates sorted', async () => {
@@ -162,7 +162,7 @@ describe('useAvailableSlots', () => {
             { timeout: 1000 }
         )
 
-        expect(result.current.availableDates.length).toBe(2)
+        expect(result.current.availableDates).toHaveLength(2)
         expect(result.current.availableDates[0].getTime()).toBeLessThan(result.current.availableDates[1].getTime())
     })
 
@@ -188,7 +188,7 @@ describe('useAvailableSlots', () => {
         tomorrow.setDate(tomorrow.getDate() + 1)
         const slotsForTomorrow = result.current.getSlotsForDate(tomorrow)
 
-        expect(slotsForTomorrow.length).toBe(2)
+        expect(slotsForTomorrow).toHaveLength(2)
         expect(slotsForTomorrow[0]).toHaveProperty('dateKey')
         expect(slotsForTomorrow[0]).toHaveProperty('timeString')
         expect(slotsForTomorrow[0]).toHaveProperty('durationMinutes')
@@ -213,7 +213,7 @@ describe('useAvailableSlots', () => {
             { timeout: 1000 }
         )
 
-        expect(result.current.categories.length).toBe(3)
+        expect(result.current.categories).toHaveLength(3)
         expect(result.current.categories.map(c => c.id)).toEqual([1, 2, 3])
     })
 

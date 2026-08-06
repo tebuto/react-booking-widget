@@ -34,35 +34,24 @@ type DataAttributes = {
     'data-font-family'?: string
 }
 
+function toDataBoolean(value: boolean): string {
+    return value ? 'true' : 'false'
+}
+
+function setOptionalBooleanAttribute(attributes: DataAttributes, key: keyof DataAttributes, value: boolean | undefined): void {
+    if (value !== undefined) {
+        attributes[key] = toDataBoolean(value)
+    }
+}
+
 function addBooleanAttributes(attributes: DataAttributes, config: TebutoBookingWidgetConfiguration): void {
-    if (config.border !== undefined) {
-        attributes['data-border'] = config.border ? 'true' : 'false'
-    }
-
-    if (config.includeSubusers !== undefined) {
-        attributes['data-include-subusers'] = config.includeSubusers ? 'true' : 'false'
-    }
-
-    if (config.showQuickFilters !== undefined) {
-        attributes['data-show-quick-filters'] = config.showQuickFilters ? 'true' : 'false'
-    }
-
-    if (config.showLocationQuickFilter !== undefined) {
-        attributes['data-show-location-quick-filter'] = config.showLocationQuickFilter ? 'true' : 'false'
-    }
-
-    if (config.showCategorySelectionFirst !== undefined) {
-        attributes['data-show-category-selection-first'] = config.showCategorySelectionFirst ? 'true' : 'false'
-    }
-
-    if (config.showTherapistProfile !== undefined) {
-        attributes['data-show-therapist-profile'] = config.showTherapistProfile ? 'true' : 'false'
-    }
-
-    const inheritFont = config.inheritFont ?? config.theme?.inheritFont
-    if (inheritFont !== undefined) {
-        attributes['data-inherit-font'] = inheritFont ? 'true' : 'false'
-    }
+    setOptionalBooleanAttribute(attributes, 'data-border', config.border)
+    setOptionalBooleanAttribute(attributes, 'data-include-subusers', config.includeSubusers)
+    setOptionalBooleanAttribute(attributes, 'data-show-quick-filters', config.showQuickFilters)
+    setOptionalBooleanAttribute(attributes, 'data-show-location-quick-filter', config.showLocationQuickFilter)
+    setOptionalBooleanAttribute(attributes, 'data-show-category-selection-first', config.showCategorySelectionFirst)
+    setOptionalBooleanAttribute(attributes, 'data-show-therapist-profile', config.showTherapistProfile)
+    setOptionalBooleanAttribute(attributes, 'data-inherit-font', config.inheritFont ?? config.theme?.inheritFont)
 }
 
 function buildDataAttributes(config: TebutoBookingWidgetConfiguration): DataAttributes {
