@@ -38,6 +38,20 @@ export type TebutoBookingWidgetConfiguration = {
     includeSubusers?: boolean
     /** Show quick filter buttons for time slots (default: false) */
     showQuickFilters?: boolean
+    /**
+     * Show a quick place/city filter (management accounts with multiple cities).
+     * Default: false
+     */
+    showLocationQuickFilter?: boolean
+    /**
+     * When true (default), visitors pick a category first if multiple categories are available.
+     * Set to false to open the calendar directly.
+     */
+    showCategorySelectionFirst?: boolean
+    /** Show the therapist profile section on category selection (default: false) */
+    showTherapistProfile?: boolean
+    /** Optional URL used as the therapist profile link when showTherapistProfile is enabled */
+    profileUrl?: string
     /** Inherit font from parent page instead of using widget font (default: false) */
     inheritFont?: boolean
     /** Theme configuration for customizing colors and fonts */
