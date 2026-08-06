@@ -22,6 +22,10 @@ type DataAttributes = {
     'data-border'?: string
     'data-include-subusers'?: string
     'data-show-quick-filters'?: string
+    'data-show-location-quick-filter'?: string
+    'data-show-category-selection-first'?: string
+    'data-show-therapist-profile'?: string
+    'data-profile-url'?: string
     'data-inherit-font'?: string
     'data-primary-color'?: string
     'data-text-primary'?: string
@@ -43,6 +47,18 @@ function addBooleanAttributes(attributes: DataAttributes, config: TebutoBookingW
         attributes['data-show-quick-filters'] = config.showQuickFilters ? 'true' : 'false'
     }
 
+    if (config.showLocationQuickFilter !== undefined) {
+        attributes['data-show-location-quick-filter'] = config.showLocationQuickFilter ? 'true' : 'false'
+    }
+
+    if (config.showCategorySelectionFirst !== undefined) {
+        attributes['data-show-category-selection-first'] = config.showCategorySelectionFirst ? 'true' : 'false'
+    }
+
+    if (config.showTherapistProfile !== undefined) {
+        attributes['data-show-therapist-profile'] = config.showTherapistProfile ? 'true' : 'false'
+    }
+
     const inheritFont = config.inheritFont ?? config.theme?.inheritFont
     if (inheritFont !== undefined) {
         attributes['data-inherit-font'] = inheritFont ? 'true' : 'false'
@@ -61,6 +77,10 @@ function buildDataAttributes(config: TebutoBookingWidgetConfiguration): DataAttr
 
     if (config.categories && config.categories.length > 0) {
         attributes['data-categories'] = config.categories.join(',')
+    }
+
+    if (config.profileUrl) {
+        attributes['data-profile-url'] = config.profileUrl
     }
 
     addBooleanAttributes(attributes, config)

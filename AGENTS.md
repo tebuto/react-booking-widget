@@ -11,7 +11,7 @@ When the booking or seminars embed contract changes in tebuto (`data-*` attribut
 3. Update the README props tables.
 4. Merge/release, then bump the `react-booking-widget/` submodule pointer in the tebuto monorepo.
 
-Source of truth for attribute names: `webapp/src/widget/booking-render.tsx` and `webapp/src/widget/seminars-render.tsx`.
+Source of truth for attribute names: `webapp/src/widget/render.tsx` and `webapp/src/widget/seminars-render.tsx`.
 
 ## Local checks
 

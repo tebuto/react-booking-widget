@@ -17,6 +17,16 @@ function applyScriptDataAttributes(script: HTMLScriptElement, config: TebutoBook
     if (config.border !== undefined) script.dataset.border = String(config.border)
     if (config.includeSubusers !== undefined) script.dataset.includeSubusers = String(config.includeSubusers)
     if (config.showQuickFilters !== undefined) script.dataset.showQuickFilters = String(config.showQuickFilters)
+    if (config.showLocationQuickFilter !== undefined) {
+        script.dataset.showLocationQuickFilter = String(config.showLocationQuickFilter)
+    }
+    if (config.showCategorySelectionFirst !== undefined) {
+        script.dataset.showCategorySelectionFirst = String(config.showCategorySelectionFirst)
+    }
+    if (config.showTherapistProfile !== undefined) {
+        script.dataset.showTherapistProfile = String(config.showTherapistProfile)
+    }
+    if (config.profileUrl) script.dataset.profileUrl = config.profileUrl
 
     const inheritFont = config.inheritFont ?? config.theme?.inheritFont
     if (inheritFont !== undefined) script.dataset.inheritFont = String(inheritFont)
@@ -131,6 +141,16 @@ function buildHtmlDataAttributes(config: TebutoBookingWidgetConfiguration): stri
     if (config.border !== undefined) attrs.push(`data-border="${config.border}"`)
     if (config.includeSubusers !== undefined) attrs.push(`data-include-subusers="${config.includeSubusers}"`)
     if (config.showQuickFilters !== undefined) attrs.push(`data-show-quick-filters="${config.showQuickFilters}"`)
+    if (config.showLocationQuickFilter !== undefined) {
+        attrs.push(`data-show-location-quick-filter="${config.showLocationQuickFilter}"`)
+    }
+    if (config.showCategorySelectionFirst !== undefined) {
+        attrs.push(`data-show-category-selection-first="${config.showCategorySelectionFirst}"`)
+    }
+    if (config.showTherapistProfile !== undefined) {
+        attrs.push(`data-show-therapist-profile="${config.showTherapistProfile}"`)
+    }
+    if (config.profileUrl) attrs.push(`data-profile-url="${config.profileUrl}"`)
 
     const inheritFont = config.inheritFont ?? config.theme?.inheritFont
     if (inheritFont !== undefined) attrs.push(`data-inherit-font="${inheritFont}"`)
@@ -220,6 +240,10 @@ so you can see the real widget working without a backend connection.
 - **categories**: Filter by category IDs
 - **includeSubusers**: Include team member appointments
 - **showQuickFilters**: Show time-of-day quick filters
+- **showLocationQuickFilter**: Show city/place quick filter
+- **showCategorySelectionFirst**: Show category selection before the calendar
+- **showTherapistProfile**: Show therapist profile on category selection
+- **profileUrl**: Optional therapist profile link
 - **theme**: Custom theming options`
             }
         }
@@ -256,6 +280,26 @@ so you can see the real widget working without a backend connection.
             description: 'Show time-of-day quick filter buttons',
             table: { category: 'Features' }
         },
+        showLocationQuickFilter: {
+            control: 'boolean',
+            description: 'Show city/place quick filter buttons',
+            table: { category: 'Features' }
+        },
+        showCategorySelectionFirst: {
+            control: 'boolean',
+            description: 'Show category selection before opening the calendar',
+            table: { category: 'Features' }
+        },
+        showTherapistProfile: {
+            control: 'boolean',
+            description: 'Show therapist profile on category selection',
+            table: { category: 'Features' }
+        },
+        profileUrl: {
+            control: 'text',
+            description: 'Optional therapist profile URL',
+            table: { category: 'Features' }
+        },
         inheritFont: {
             control: 'boolean',
             description: 'Use parent page font instead of widget font',
@@ -284,6 +328,25 @@ export const WithQuickFilters: Story = {
     args: {
         therapistUUID: DEMO_THERAPIST_UUID,
         showQuickFilters: true,
+        border: true
+    }
+}
+
+export const WithLocationQuickFilter: Story = {
+    args: {
+        therapistUUID: DEMO_THERAPIST_UUID,
+        includeSubusers: true,
+        showQuickFilters: true,
+        showLocationQuickFilter: true,
+        border: true
+    }
+}
+
+export const SkipCategorySelection: Story = {
+    args: {
+        therapistUUID: DEMO_THERAPIST_UUID,
+        categories: [1, 2],
+        showCategorySelectionFirst: false,
         border: true
     }
 }
@@ -398,6 +461,10 @@ export const FullyConfigured: Story = {
         border: true,
         includeSubusers: true,
         showQuickFilters: true,
+        showLocationQuickFilter: true,
+        showCategorySelectionFirst: false,
+        showTherapistProfile: true,
+        profileUrl: 'https://example.com/profile',
         theme: {
             primaryColor: '#6366f1',
             backgroundColor: '#fafafa',

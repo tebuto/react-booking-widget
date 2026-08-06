@@ -81,6 +81,28 @@ describe('TebutoBookingWidget', () => {
         expect(script.dataset.showQuickFilters).toBe('true')
     })
 
+    it('should set the "data-show-location-quick-filter" attribute when showLocationQuickFilter is true', () => {
+        render(<TebutoBookingWidget therapistUUID={therapistUUID} showLocationQuickFilter={true} />)
+
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.showLocationQuickFilter).toBe('true')
+    })
+
+    it('should set the "data-show-category-selection-first" attribute when showCategorySelectionFirst is false', () => {
+        render(<TebutoBookingWidget therapistUUID={therapistUUID} showCategorySelectionFirst={false} />)
+
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.showCategorySelectionFirst).toBe('false')
+    })
+
+    it('should set therapist profile attributes when configured', () => {
+        render(<TebutoBookingWidget therapistUUID={therapistUUID} showTherapistProfile={true} profileUrl="https://example.com/profile" />)
+
+        const script = screen.getByTestId<HTMLScriptElement>('tebuto-booking-widget-script')
+        expect(script.dataset.showTherapistProfile).toBe('true')
+        expect(script.dataset.profileUrl).toBe('https://example.com/profile')
+    })
+
     it('should set the "data-inherit-font" attribute when inheritFont is true', () => {
         render(<TebutoBookingWidget therapistUUID={therapistUUID} inheritFont={true} />)
 
@@ -165,6 +187,10 @@ describe('TebutoBookingWidget', () => {
         expect(script.dataset.border).toBeUndefined()
         expect(script.dataset.includeSubusers).toBeUndefined()
         expect(script.dataset.showQuickFilters).toBeUndefined()
+        expect(script.dataset.showLocationQuickFilter).toBeUndefined()
+        expect(script.dataset.showCategorySelectionFirst).toBeUndefined()
+        expect(script.dataset.showTherapistProfile).toBeUndefined()
+        expect(script.dataset.profileUrl).toBeUndefined()
         expect(script.dataset.inheritFont).toBeUndefined()
         expect(script.dataset.primaryColor).toBeUndefined()
     })

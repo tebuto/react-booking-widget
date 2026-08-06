@@ -76,17 +76,21 @@ function BookingPage() {
 
 ### Props Reference
 
-| Prop               | Type                | Required | Default         | Description                                 |
-| ------------------ | ------------------- | -------- | --------------- | ------------------------------------------- |
-| `therapistUUID`    | `string`            | Yes      | -               | Unique identifier for the therapist         |
-| `backgroundColor`  | `string`            | No       | `transparent`   | Background color (hex, rgb, etc.)           |
-| `border`           | `boolean`           | No       | `true`          | Show border around the widget               |
-| `categories`       | `number[]`          | No       | `[]`            | Filter appointments by category IDs         |
-| `includeSubusers`  | `boolean`           | No       | `false`         | Include subuser appointments                |
-| `showQuickFilters` | `boolean`           | No       | `false`         | Show quick filter buttons for time slots    |
-| `inheritFont`      | `boolean`           | No       | `false`         | Use parent page font instead of widget font |
-| `theme`            | `TebutoWidgetTheme` | No       | -               | Theme customization object                  |
-| `noScriptText`     | `string`            | No       | Default message | Text shown when JavaScript is disabled      |
+| Prop                         | Type                | Required | Default         | Description                                              |
+| ---------------------------- | ------------------- | -------- | --------------- | -------------------------------------------------------- |
+| `therapistUUID`              | `string`            | Yes      | -               | Unique identifier for the therapist                      |
+| `backgroundColor`            | `string`            | No       | `transparent`   | Background color (hex, rgb, etc.)                        |
+| `border`                     | `boolean`           | No       | `true`          | Show border around the widget                            |
+| `categories`                 | `number[]`          | No       | `[]`            | Filter appointments by category IDs                      |
+| `includeSubusers`            | `boolean`           | No       | `false`         | Include subuser appointments                             |
+| `showQuickFilters`           | `boolean`           | No       | `false`         | Show quick filter buttons for time slots                 |
+| `showLocationQuickFilter`    | `boolean`           | No       | `false`         | Show city/place quick filter                             |
+| `showCategorySelectionFirst` | `boolean`           | No       | `true`          | Show category selection before the calendar              |
+| `showTherapistProfile`       | `boolean`           | No       | `false`         | Show therapist profile on category selection             |
+| `profileUrl`                 | `string`            | No       | -               | Optional therapist profile link                          |
+| `inheritFont`                | `boolean`           | No       | `false`         | Use parent page font instead of widget font              |
+| `theme`                      | `TebutoWidgetTheme` | No       | -               | Theme customization object                               |
+| `noScriptText`               | `string`            | No       | Default message | Text shown when JavaScript is disabled                   |
 
 ### Theme Configuration
 
