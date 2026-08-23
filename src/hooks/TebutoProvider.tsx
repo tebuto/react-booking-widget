@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from 'react'
 
 const TEBUTO_API_BASE_URL = 'https://api.tebuto.de'
 const FINGERPRINT_STORAGE_KEY = 'tebuto-fingerprint'

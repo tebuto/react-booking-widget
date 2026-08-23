@@ -11,6 +11,10 @@ updates:
       all:
         patterns:
           - "*"
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+        # 2026-08-23: left on 6.x — @rollup/plugin-typescript breaks on TS 7 (rollup build: Cannot read properties of undefined reading 'ES2015')
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
