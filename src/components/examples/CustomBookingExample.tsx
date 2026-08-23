@@ -1,4 +1,4 @@
-import { FormEvent, useState, useMemo } from 'react'
+import { FormEvent, useMemo, useState } from 'react'
 import type { AppointmentLocation, ClientInfo, EnrichedTimeSlot } from '../../api-types'
 import { TebutoProvider, useBookingFlow } from '../../hooks'
 
