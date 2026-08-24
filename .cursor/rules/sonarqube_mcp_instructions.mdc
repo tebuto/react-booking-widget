@@ -1,0 +1,14 @@
+---
+description: SonarQube live analysis for agents
+alwaysApply: true
+---
+
+# SonarQube (local)
+
+Live analysis is SonarQube MCP `analyze_code_snippet` (workspace-mounted; pass project-relative `filePath`, `language`, `scope`). Use `analyze_file_list` instead only if that tool exists. Do not run `sonar-scanner`. Do not use `search_sonar_issues_in_projects` to verify edits (the server lags local analysis).
+
+Project key is `sonar.projectKey` in `sonar-project.properties`. Do not look it up.
+
+After creating or modifying `*.ts`, `*.tsx`, `*.js`, or `*.jsx`, analyze each changed file. Fix every issue, re-analyze, then finish. The same analysis is required before `git commit` of JS/TS (Lefthook/Biome is not a substitute).
+
+Leave IDE automatic analysis on. Do not call `toggle_automatic_analysis`.

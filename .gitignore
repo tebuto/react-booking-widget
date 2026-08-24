@@ -3,4 +3,10 @@ node_modules
 .DS_Store
 .playwright-mcp
 coverage
+.scannerwork/
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
 storybook-static

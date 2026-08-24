@@ -20,3 +20,11 @@ pnpm test
 pnpm lint
 pnpm build
 ```
+
+## Tooling & quality
+
+- **Lefthook** + Biome — staged format/lint on commit (`lefthook.yml`).
+- **SonarQube** — `sonar-project.properties`, SonarLint, Cursor MCP `analyze_code_snippet` on changed JS/TS before agent commits. See `.cursor/rules/sonarqube_mcp_instructions.mdc`.
+- **CI** — `.github/workflows/branch.yaml` on `ubuntu-latest`: tests → Sonar scan → quality gate. See [`docs/ci.md`](docs/ci.md).
+- **Dependabot** — yearly; weekly updates via Cursor Automation.
+- Cross-project guide: Artus portal wiki **Repository Tooling (SonarQube, CI, Cursor Agents)**.

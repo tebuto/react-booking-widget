@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "hooks": {
+    "afterMCPExecution": [
+      {
+        "command": ".cursor/hooks/sonar-track-analysis.sh",
+        "matcher": "analyze_file_list|analyze_code_snippet"
+      }
+    ],
+    "postToolUse": [
+      {
+        "command": ".cursor/hooks/sonar-track-analysis.sh",
+        "matcher": "CallDynamicTool|MCP:.*(analyze_file_list|analyze_code_snippet)"
+      }
+    ],
+    "beforeShellExecution": [
+      {
+        "command": ".cursor/hooks/sonar-gate-commit.sh",
+        "matcher": "git\\s+commit",
+        "failClosed": true
+      }
+    ],
+    "preToolUse": [
+      {
+        "command": ".cursor/hooks/sonar-secrets/build-scripts/pre-tool-use-secrets.sh",
+        "matcher": "Read",
+        "timeout": 60,
+        "failClosed": false
+      }
+    ],
+    "beforeReadFile": [
+      {
+        "command": ".cursor/hooks/sonar-secrets/build-scripts/before-read-file-secrets.sh",
+        "matcher": "Read|TabRead",
+        "timeout": 60,
+        "failClosed": false
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "command": ".cursor/hooks/sonar-secrets/build-scripts/prompt-secrets.sh",
+        "matcher": "UserPromptSubmit",
+        "timeout": 60,
+        "failClosed": false
+      }
+    ]
+  }
+}
