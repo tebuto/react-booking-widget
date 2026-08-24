@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "sonarqube": {
+      "command": "sonar",
+      "args": [
+        "run",
+        "mcp",
+        "--project",
+        "tebuto_react-booking-widget_1010e87a-ca30-4917-a946-eeaa65dede4c",
+        "--toolsets",
+        "analysis,ide,issues,quality-gates,rules,duplications,measures,security-hotspots,coverage"
+      ],
+      "env": {
+        "SONARQUBE_IDE_PORT": "64120"
+      }
+    }
+  }
+}
