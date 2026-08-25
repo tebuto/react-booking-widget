@@ -14,8 +14,9 @@ is_analyze=$(printf '%s' "$input" | node -e '
       const blob=JSON.stringify(j).toLowerCase();
       const hit =
         blob.includes("analyze_file_list") ||
+        blob.includes("run_advanced_code_analysis") ||
         blob.includes("analyze_code_snippet") ||
-        /analyze_file_list|analyze_code_snippet/.test(
+        /analyze_file_list|run_advanced_code_analysis|analyze_code_snippet/.test(
           String(j.toolName||j.tool_name||j.name||j.tool||"")
         );
       const failed =
