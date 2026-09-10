@@ -1,6 +1,6 @@
 name: "Branch"
 
-# Runner: ubuntu-latest (tebuto org) — see docs/ci.md.
+# Runner: ubuntu-latest (artus-engineering org) — see docs/ci.md.
 
 on:
   push:

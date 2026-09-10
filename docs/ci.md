@@ -1,6 +1,6 @@
 # CI (GitHub Actions)
 
-Runner: `ubuntu-latest` for tebuto org repos. Cross-project tooling: Artus portal wiki **Repository Tooling (SonarQube, CI, Cursor Agents)** or [agency-portal `docs/dev-tooling.md`](https://github.com/artus-engineering/agency-portal/blob/main/docs/dev-tooling.md).
+Runner: `ubuntu-latest` for artus-engineering org repos. Cross-project tooling: Artus portal wiki **Repository Tooling (SonarQube, CI, Cursor Agents)** or [agency-portal `docs/dev-tooling.md`](https://github.com/artus-engineering/agency-portal/blob/main/docs/dev-tooling.md).
 
 ## Workflows
 
